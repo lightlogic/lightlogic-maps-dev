@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, NgZone, ChangeDetectorRef, Output, EventEmitter } from '@angular/core';
 import { Map, View } from 'ol';
 import { Vector as LayerVector, Tile } from 'ol/layer';
 import { Vector as SourceVector, OSM } from 'ol/source';
@@ -7,22 +7,33 @@ import { WKT } from 'ol/format';
 @Component({
   selector: 'app-hydro-map',
   templateUrl: 'hydro-map.component.html',
-  styleUrls: ['hydro-map.component.css']
+  styleUrls: ['hydro-map.component.css'],
 })
 export class HydroMapComponent implements AfterViewInit {
   view: View;
   Map: Map;
+  @Output() mapReady = new EventEmitter<Map>();
 
-  ngAfterViewInit() {
+
+  constructor(private zone: NgZone, private cd: ChangeDetectorRef) { }
+
+  ngAfterViewInit(): void {
+    if (!this.Map) {
+      this.zone.runOutsideAngular(() => this.initMap());
+    }
+    setTimeout(() => this.mapReady.emit(this.Map));
+  }
+
+  initMap() {
     // view
-    this.view = new View ({
-        zoom: 13,
-        center: [790060.1994068121, 5935536.331790512],
-      });
+    this.view = new View({
+      zoom: 13,
+      center: [790060.1994068121, 5935536.331790512],
+    });
     // Map object
-    this.Map = new Map ({
+    this.Map = new Map({
       view: this.view,
-      target: 'map'
+      target: 'map',
     });
 
     // Base Layers

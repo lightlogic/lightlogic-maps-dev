@@ -7,4 +7,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'lightlogic-maps';
+
+  public onMapReady(event) {
+    console.log("Map Ready")
+  }
 }
