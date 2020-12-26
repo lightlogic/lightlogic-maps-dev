@@ -63,4 +63,19 @@ export class FeaturesService {
         this.featuresUpdated.next([...this.features]);
       });
   }
+
+  deleteFeature(featureId: string) {
+    this.http
+      .delete('http://localhost:3000/api/features/' + featureId)
+      .subscribe(() => {
+        // to keep in the local array of features the posts that does not have featureId
+        // and delete the one that has the featureId
+        // -> filter checks every elements of an array against a condition. It will keep the element that does NOT match the condition
+        const featuresWithoutTheDeleted = this.features.filter(
+          (feature) => feature.id !== featureId
+        );
+        this.features = featuresWithoutTheDeleted;
+        this.featuresUpdated.next([...this.features]);
+      });
+  }
 }

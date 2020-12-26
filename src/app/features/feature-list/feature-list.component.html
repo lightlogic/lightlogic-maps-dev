@@ -5,12 +5,15 @@
         {{ feature.description }}
       </span>
       <span class="spacer"></span>
-        <ul>
-          <li>{{ feature.uri}}&nbsp;</li>
-        </ul>
+      <ul>
+        <li>{{ feature.uri}}&nbsp;</li>
+      </ul>
     </mat-expansion-panel-header>
     <p>{{ feature.wktGeometry }}</p>
+    <mat-action-row>
+      <button mat-button color="primary">EDIT</button>
+      <button mat-button color="warn" (click)="onDelete(feature.id)">DELETE</button>
+    </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 <p class="info-text mat-body-1" *ngIf="features.length <= 0">No posts added yet!</p>
-

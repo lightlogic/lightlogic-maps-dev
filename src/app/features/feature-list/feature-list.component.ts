@@ -24,6 +24,10 @@ export class FeatureListComponent implements OnInit, OnDestroy {
       });
   }
 
+  onDelete(featureId: string) {
+    this.featuresService.deleteFeature(featureId);
+  }
+
   ngOnDestroy() {
     this.featuresSub.unsubscribe();
   }

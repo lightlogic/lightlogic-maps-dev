@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 
-const env = 'development';
+const env = "development";
 const config = require("./secrets.js")[env];
 
 const Feature = require("./models/feature");
@@ -69,6 +69,13 @@ app.get("/api/features", (req, res, next) => {
       message: "Features fetched successfully !",
       features: documents,
     });
+  });
+});
+
+app.delete("/api/features/:id", (req, res, next) => {
+  Feature.deleteOne({ _id: req.params.id }).then((result) => {
+    console.log(result);
+    res.status(200).json({ message: "Post deleted" });
   });
 });
 
