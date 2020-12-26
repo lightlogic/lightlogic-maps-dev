@@ -1,7 +1,9 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
-var config = require("./secrets.js");
+
+const env = 'development';
+const config = require("./secrets.js")[env];
 
 const Feature = require("./models/feature");
 
@@ -9,14 +11,15 @@ const app = express();
 
 const mongoConnectURL =
   "mongodb+srv://" +
-  config.mongoUser +
+  config.database.mongoUser +
   ":" +
-  config.mongoPass +
+  config.database.mongoPass +
   "@" +
-  config.mongoHost +
+  config.database.mongoHost +
   "/" +
-  config.mongoDBname +
+  config.database.mongoDBname +
   "?retryWrites=true";
+
 mongoose
   .connect(mongoConnectURL)
   .then(() => {
