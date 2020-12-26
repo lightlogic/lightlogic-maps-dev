@@ -2,8 +2,11 @@ main {
   width: 80%;
   margin: 1rem auto;
 }
+.divmap {
+  margin: 1rem auto;
+}
 
 .map {
   height: 50vh;
-  width: 50vw;
+  width: 80vw;
 }

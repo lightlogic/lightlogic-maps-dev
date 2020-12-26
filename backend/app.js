@@ -57,9 +57,11 @@ app.post("/api/features", (req, res, next) => {
     wktGeometry: req.body.wktGeometry,
     projection: req.body.projection,
   });
-  feature.save();
-  res.status(201).json({
-    message: "Feature added sucessfully",
+  feature.save().then((createdFeature) => {
+    res.status(201).json({
+      message: "Feature added sucessfully",
+      featureId: createdFeature._id,
+    });
   });
 });
 

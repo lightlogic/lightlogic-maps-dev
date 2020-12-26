@@ -56,9 +56,10 @@ export class FeaturesService {
       projection: projection,
     };
     this.http
-      .post<{ message: string }>('http://localhost:3000/api/features', feature)
+      .post<{ message: string, featureId: string }>('http://localhost:3000/api/features', feature)
       .subscribe((responseData) => {
-        console.log(responseData.message);
+        const id = responseData.featureId;
+        feature.id = id;
         this.features.push(feature);
         this.featuresUpdated.next([...this.features]);
       });
