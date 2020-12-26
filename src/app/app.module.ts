@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { FormsModule } from "@angular/forms";
 import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatInputModule } from "@angular/material/input";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +25,7 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
     FormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatInputModule,
     MatToolbarModule,
     MatExpansionModule,
     MatCardModule,
