@@ -44,3 +44,7 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+# secret configuration files
+# mongoDB config
+backend/secrets.js
