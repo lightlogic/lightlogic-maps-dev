@@ -1,2 +1,7 @@
 <app-header></app-header>
-<app-hydro-map class="map" (mapReady)="onMapReady($event)"></app-hydro-map>
+<main>
+  <div>
+    <router-outlet></router-outlet>
+  </div>
+    <app-hydro-map class="map" (mapReady)="onMapReady($event)"></app-hydro-map>
+</main>

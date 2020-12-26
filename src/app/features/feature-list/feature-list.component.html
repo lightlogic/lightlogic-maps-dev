@@ -1,0 +1,16 @@
+<mat-accordion multi="true" *ngIf="features.length > 0">
+  <mat-expansion-panel *ngFor="let feature of features">
+    <mat-expansion-panel-header>
+      <span>
+        {{ feature.description }}
+      </span>
+      <span class="spacer"></span>
+        <ul>
+          <li>{{ feature.uri}}&nbsp;</li>
+        </ul>
+    </mat-expansion-panel-header>
+    <p>{{ feature.wktGeometry }}</p>
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text mat-body-1" *ngIf="features.length <= 0">No posts added yet!</p>
+

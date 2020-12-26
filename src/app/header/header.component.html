@@ -1,1 +1,14 @@
-<mat-toolbar color="primary">Lightlogic</mat-toolbar>
+<mat-toolbar color="primary">
+  <span>
+    <a routerLink="/">Lightlogic Maps</a>
+  </span>
+  <span class="spacer"></span>
+  <ul>
+    <li>
+      <a mat-button routerLink="/display" routerLinkActive="mat-accent">Display Features</a>
+    </li>
+    <li>
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent">New Features</a>
+    </li>
+  </ul>
+</mat-toolbar>

@@ -1,0 +1,43 @@
+<mat-card>
+  <form (submit)="onSaveFeature(featureForm)" #featureForm="ngForm">
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="uri"
+        required
+        placeholder="URI"
+        ngModel>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="description"
+        required
+        placeholder="Description"
+        ngModel>
+    </mat-form-field>
+    <mat-form-field>
+      <textarea
+        matInput
+        rows="4"
+        name="wktGeometry"
+        placeholder="WKT polygon coordinates"
+        ngModel></textarea>
+    </mat-form-field>
+    <mat-form-field>
+      <input
+        matInput
+        type="text"
+        name="projection"
+        required
+        placeholder="Projection"
+        ngModel>
+    </mat-form-field>
+    <button
+      mat-raised-button
+      color="accent"
+      type="submit">Save Post</button>
+  </form>
+</mat-card>
