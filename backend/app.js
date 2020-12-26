@@ -1,6 +1,27 @@
 const express = require("express");
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
+const Feature = require("./models/feature");
 
 const app = express();
+
+mongoose
+  .connect(
+    "mongodb+srv://gero102:6wghwSh.7HtG-4brr@cluster0.65rz0.mongodb.net/lightlogicmaps?retryWrites=true"
+  )
+  .then(() => {
+    console.log("Connected to the database.");
+  })
+  .catch(() => {
+    console.log("Connection failed.");
+  });
+
+// body-parser acts as an express middleware
+// it parses the body of the request for json data and make it available as such in the response
+app.use(bodyParser.json());
+// body-parser can also parses the body for url encoded data and make it available
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -15,7 +36,24 @@ app.use((req, res, next) => {
   next();
 });
 
-app.use("/api/features", (req, res, next) => {
+//TODO #3 post new ol/feature from the frontend to store them into mongoDB
+app.post("/api/features", (req, res, next) => {
+  // req.body is a new object added to the request by body-parser
+  const feature = new Feature({
+    //id: req.body.id,
+    uri: req.body.uri,
+    description: req.body.description,
+    wktGeometry: req.body.wktGeometry,
+    projection: req.body.projection,
+  });
+  feature.save();
+  res.status(201).json({
+    message: "Feature added sucessfully",
+  });
+});
+
+//TODO #2 store ol/features in mongoDB
+app.get("/api/features", (req, res, next) => {
   const features = [
     {
       id: "2284",
@@ -35,7 +73,7 @@ app.use("/api/features", (req, res, next) => {
     },
   ];
   res.status(200).json({
-    message: "Features fetched sucessfully !",
+    message: "Features fetched successfully !",
     features: features,
   });
 });

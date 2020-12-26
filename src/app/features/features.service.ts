@@ -32,7 +32,11 @@ export class FeaturesService {
       wktGeometry: wktGeometry,
       projection: projection
     };
-    this.features.push(feature);
-    this.featuresUpdated.next([...this.features]);
+    this.http.post<{message: string}>('http://localhost:3000/api/features', feature)
+      .subscribe((responseData) => {
+        console.log(responseData.message);
+        this.features.push(feature);
+        this.featuresUpdated.next([...this.features]);
+      });
   }
 }
