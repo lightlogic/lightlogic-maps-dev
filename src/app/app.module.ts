@@ -2,10 +2,11 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { FormsModule } from "@angular/forms";
-import { MatFormFieldModule } from "@angular/material/form-field";
-import { MatInputModule } from "@angular/material/input";
+import { FormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
@@ -18,13 +19,20 @@ import { FeatureListComponent } from './features/feature-list/feature-list.compo
 import { FeatureCreateComponent } from './features/feature-create/feature-create.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, HydroMapComponent, FeatureListComponent, FeatureCreateComponent],
+  declarations: [
+    AppComponent,
+    HeaderComponent,
+    HydroMapComponent,
+    FeatureListComponent,
+    FeatureCreateComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatProgressSpinnerModule,
     MatInputModule,
     MatToolbarModule,
     MatExpansionModule,
