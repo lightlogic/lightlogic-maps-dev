@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -10,6 +10,7 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
+  private swisstopoFeature: any;
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -38,6 +39,26 @@ export class FeaturesService {
       });
   }
 
+  getSwisstopoFeature(query: string) {
+    this.http
+      .get<any>('http://localhost:3000/api/features/' + query)
+      .subscribe((responseJson) => {
+        console.log(responseJson);
+        this.swisstopoFeature = responseJson;
+      });
+    return this.swisstopoFeature;
+    // this.http
+    //   .post<any>('https://ld.geo.admin.ch/query', query, {
+    //     headers: new HttpHeaders({
+    //       Accept: 'application/sparql-results+json',
+    //       'Content-Type': 'application/x-www-form-urlencoded',
+    //     }),
+    //   })
+    //   .subscribe((responseData) => {
+    //     console.log(responseData);
+    //   });
+  }
+
   getFeatureUpdateListener() {
     return this.featuresUpdated.asObservable();
   }
@@ -57,13 +78,16 @@ export class FeaturesService {
       projection: projection,
     };
     this.http
-      .post<{ message: string, featureId: string }>('http://localhost:3000/api/features', feature)
+      .post<{ message: string; featureId: string }>(
+        'http://localhost:3000/api/features',
+        feature
+      )
       .subscribe((responseData) => {
         const id = responseData.featureId;
         feature.id = id;
         this.features.push(feature);
         this.featuresUpdated.next([...this.features]);
-        this.router.navigate(["/display"])
+        this.router.navigate(['/display']);
       });
   }
 

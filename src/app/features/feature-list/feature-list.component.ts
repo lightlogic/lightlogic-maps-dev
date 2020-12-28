@@ -11,6 +11,7 @@ import { FeaturesService } from '../features.service';
 export class FeatureListComponent implements OnInit, OnDestroy {
   isLoading = false;
   features: Feature[] = [];
+  error = null;
   private featuresSub: Subscription;
 
   constructor(public featuresService: FeaturesService) {}
@@ -20,10 +21,15 @@ export class FeatureListComponent implements OnInit, OnDestroy {
     this.featuresService.getFeatures();
     this.featuresSub = this.featuresService
       .getFeatureUpdateListener()
-      .subscribe((features: Feature[]) => {
-        this.features = features;
-        this.isLoading = false;
-      });
+      .subscribe(
+        (features: Feature[]) => {
+          this.features = features;
+          this.isLoading = false;
+        },
+        (error) => {
+          this.error = error.message;
+        }
+      );
   }
 
   onDelete(featureId: string) {

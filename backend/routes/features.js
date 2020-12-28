@@ -1,4 +1,5 @@
 const express = require("express");
+const request = require("superagent");
 
 const Feature = require("../models/feature");
 
@@ -43,6 +44,19 @@ router.delete("/:id", (req, res, next) => {
   });
 });
 
-
+router.get("/:query", (req, res, next) => {
+  // let myQuery = req.params.query;
+  // myQuery =
+  //   "query=PREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0APREFIX+geo%3A+%3Chttp%3A%2F%2Fwww.opengis.net%2Font%2Fgeosparql%23%3E%0APREFIX+gn%3A+%3Chttp%3A%2F%2Fwww.geonames.org%2Fontology%23%3E%0A%0ASELECT+%3FCommune+%3FName+%3FWKT%0AWHERE+%7B%0A%3FCommune+gn%3AfeatureCode+gn%3AA.ADM3+.%0A%3FCommune+schema%3Aname+%22Mont-Vully%22+.%0A%3FCommune+geo%3AdefaultGeometry+%3FGeometry+.%0A%3FGeometry+geo%3AasWKT+%3FWKT+.%0A%3FCommune+%3Chttp%3A%2F%2Fpurl.org%2Fdc%2Fterms%2Fissued%3E+%3FDate+.%0AFILTER+(%3FDate+%3D+%222020-01-01%22%5E%5Exsd%3Adate)%0A%7D";
+  request
+    .post("https://ld.geo.admin.ch/query")
+    .send(req.params.query)
+    .set("Accept", "application/sparql-results+json")
+    .set("Content-Type", "application/x-www-form-urlencoded")
+    .then((response) => {
+      console.log(response.body)
+      res.status(200).json(response.body.results);
+    });
+});
 
 module.exports = router;
