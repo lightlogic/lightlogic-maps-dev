@@ -10,7 +10,7 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
-  private swisstopoFeature: any;
+  private swisstopoFeature = new Subject<Feature>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -41,22 +41,14 @@ export class FeaturesService {
 
   getSwisstopoFeature(query: string) {
     this.http
-      .get<any>('http://localhost:3000/api/features/' + query)
+      .get<Feature>('http://localhost:3000/api/features/' + query)
       .subscribe((responseJson) => {
-        console.log(responseJson);
-        this.swisstopoFeature = responseJson;
+       this.swisstopoFeature.next(responseJson);
       });
-    return this.swisstopoFeature;
-    // this.http
-    //   .post<any>('https://ld.geo.admin.ch/query', query, {
-    //     headers: new HttpHeaders({
-    //       Accept: 'application/sparql-results+json',
-    //       'Content-Type': 'application/x-www-form-urlencoded',
-    //     }),
-    //   })
-    //   .subscribe((responseData) => {
-    //     console.log(responseData);
-    //   });
+  }
+
+  getSwisstopoFeatureListener() {
+    return this.swisstopoFeature.asObservable();
   }
 
   getFeatureUpdateListener() {
