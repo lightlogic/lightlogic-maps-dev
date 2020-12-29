@@ -11,3 +11,7 @@ ul {
 .spacer {
   flex: 3 3 auto;
 }
+
+mat-spinner {
+  margin: auto;
+}

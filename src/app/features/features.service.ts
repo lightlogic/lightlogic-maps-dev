@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 import { Feature } from './feature.model';
 
@@ -9,8 +10,9 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
+  private swisstopoFeature = new Subject<Feature>();
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   getFeatures() {
     this.http
@@ -37,11 +39,23 @@ export class FeaturesService {
       });
   }
 
+  addSwisstopoFeature(query: string) {
+    this.http
+      .get<Feature>('http://localhost:3000/api/features/' + query)
+      .subscribe((responseJson) => {
+       this.swisstopoFeature.next(responseJson);
+      });
+  }
+
+  getSwisstopoFeatureListener() {
+    return this.swisstopoFeature.asObservable();
+  }
+
   getFeatureUpdateListener() {
     return this.featuresUpdated.asObservable();
   }
 
-  addFeature(
+  addCustomFeature(
     id: string,
     uri: string,
     description: string,
@@ -56,12 +70,16 @@ export class FeaturesService {
       projection: projection,
     };
     this.http
-      .post<{ message: string, featureId: string }>('http://localhost:3000/api/features', feature)
+      .post<{ message: string; featureId: string }>(
+        'http://localhost:3000/api/features',
+        feature
+      )
       .subscribe((responseData) => {
         const id = responseData.featureId;
         feature.id = id;
         this.features.push(feature);
         this.featuresUpdated.next([...this.features]);
+        this.router.navigate(['/display']);
       });
   }
 

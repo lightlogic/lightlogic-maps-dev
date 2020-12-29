@@ -1,8 +1,13 @@
 const express = require("express");
+const request = require("superagent");
+const bodyparser = require("body-parser");
 
 const Feature = require("../models/feature");
+const { getTokenSourceMapRange } = require("typescript");
 
 const router = express.Router();
+
+router.use(bodyparser.json());
 
 // method POST
 // path: /api/features
@@ -43,6 +48,24 @@ router.delete("/:id", (req, res, next) => {
   });
 });
 
-
+router.get("/:query", (req, res, next) => {
+  const communeName = req.params.query.substring(req.params.query.indexOf("%22")+3,req.params.query.indexOf("%22+"));
+  console.log(communeName);
+  request
+    .post("https://ld.geo.admin.ch/query")
+    .send(req.params.query)
+    .set("Accept", "application/sparql-results+json")
+    .set("Content-Type", "application/x-www-form-urlencoded")
+    .then((response) => {
+      const swisstopoFeature = new Feature({
+        id: null,
+        uri: response.body.results.bindings[0].Commune.value,
+        description: communeName,
+        wktGeometry: response.body.results.bindings[0].WKT.value,
+        projection: "EPSG:3857",
+      });
+      res.status(200).json(swisstopoFeature);
+    });
+});
 
 module.exports = router;
