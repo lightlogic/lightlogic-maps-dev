@@ -49,6 +49,8 @@ router.delete("/:id", (req, res, next) => {
 });
 
 router.get("/:query", (req, res, next) => {
+  const communeName = req.params.query.substring(req.params.query.indexOf("%22")+3,req.params.query.indexOf("%22+"));
+  console.log(communeName);
   request
     .post("https://ld.geo.admin.ch/query")
     .send(req.params.query)
@@ -58,7 +60,7 @@ router.get("/:query", (req, res, next) => {
       const swisstopoFeature = new Feature({
         id: null,
         uri: response.body.results.bindings[0].Commune.value,
-        description: null,
+        description: communeName,
         wktGeometry: response.body.results.bindings[0].WKT.value,
         projection: "EPSG:3857",
       });

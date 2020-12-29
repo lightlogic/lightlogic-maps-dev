@@ -1,4 +1,5 @@
-<mat-card>
+<mat-spinner *ngIf="isCommuneLoading"></mat-spinner>
+<mat-card *ngIf="!isCommuneLoading">
   <mat-card-header>
     <mat-card-title>
       Commune

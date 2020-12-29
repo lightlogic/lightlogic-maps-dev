@@ -39,7 +39,7 @@ export class FeaturesService {
       });
   }
 
-  getSwisstopoFeature(query: string) {
+  addSwisstopoFeature(query: string) {
     this.http
       .get<Feature>('http://localhost:3000/api/features/' + query)
       .subscribe((responseJson) => {
@@ -55,7 +55,7 @@ export class FeaturesService {
     return this.featuresUpdated.asObservable();
   }
 
-  addFeature(
+  addCustomFeature(
     id: string,
     uri: string,
     description: string,
