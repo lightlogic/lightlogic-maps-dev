@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
@@ -39,9 +39,9 @@ export class FeaturesService {
       });
   }
 
-  addSwisstopoFeature(query: string) {
+  addSwisstopoFeature(communeName: string) {
     this.http
-      .get<Feature>('http://localhost:3000/api/features/' + query)
+      .get<Feature>('http://localhost:3000/api/features/' + encodeURI(communeName))
       .subscribe((responseJson) => {
        this.swisstopoFeature.next(responseJson);
       });
