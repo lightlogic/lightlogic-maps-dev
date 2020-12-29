@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -13,6 +13,8 @@ import { FeaturesService } from '../features.service';
   styleUrls: ['./feature-create.component.css'],
 })
 export class FeatureCreateComponent implements OnInit {
+  communeForm: FormGroup;
+  featureForm: FormGroup;
   private featureId: string;
   private featureData: Feature;
   private swisstopoFeatureSub: Subscription;
@@ -33,16 +35,31 @@ export class FeatureCreateComponent implements OnInit {
         this.featureData = subsFeature;
       console.log(this.featureData);
       });
+    // Commune Form (reactive)
+      this.communeForm = new FormGroup({
+        'communeName': new FormControl(null)
+      });
+      this.featureForm = new FormGroup({
+        'uri': new FormControl(null),
+        'description': new FormControl(null),
+        'wktGeometry': new FormControl(null),
+        'projection': new FormControl('EPSG:3857'),
+      })
   }
 
-  onSaveFeature(form: NgForm) {
+  onAddFeature() {
     this.featuresService.addFeature(
       this.featureId,
-      form.value.uri,
-      form.value.description,
-      form.value.wktGeometry,
-      form.value.projection
+      this.featureForm.value.uri,
+      this.featureForm.value.description,
+      this.featureForm.value.wktGeometry,
+      this.featureForm.value.projection
     );
-    form.resetForm();
+    this.featureForm.reset;
   }
+
+  onAddCommune() {
+    console.log(this.communeForm);
+  }
+
 }
