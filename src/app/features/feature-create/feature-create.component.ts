@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -11,7 +11,7 @@ import { FeaturesService } from '../features.service';
   templateUrl: './feature-create.component.html',
   styleUrls: ['./feature-create.component.css'],
 })
-export class FeatureCreateComponent implements OnInit {
+export class FeatureCreateComponent implements OnInit, OnDestroy {
   communeForm: FormGroup;
   featureForm: FormGroup;
   isCommuneLoading = false;
@@ -68,5 +68,8 @@ export class FeatureCreateComponent implements OnInit {
           this.isCommuneLoading = false;
         }
       });
+  }
+  ngOnDestroy() {
+    this.swisstopoSearchStatusSub.unsubscribe();
   }
 }
