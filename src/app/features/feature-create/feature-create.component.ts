@@ -19,8 +19,7 @@ export class FeatureCreateComponent implements OnInit {
   private featureData: Feature;
   private swisstopoSearchStatusSub: Subscription;
 
-  constructor(
-    public featuresService: FeaturesService ) {}
+  constructor(public featuresService: FeaturesService) {}
 
   ngOnInit() {
     this.featureId = null;
@@ -50,22 +49,24 @@ export class FeatureCreateComponent implements OnInit {
 
   onAddCommune() {
     this.isCommuneLoading = true;
-    this.featuresService.addSwisstopoFeature(this.communeForm.value.communeName);
+    this.featuresService.addSwisstopoFeature(
+      this.communeForm.value.communeName
+    );
     this.swisstopoSearchStatusSub = this.featuresService
       .getSwisstopoSearchListener()
       .subscribe((subsFeature) => {
-        if (subsFeature.feature.description !== null) {
+        if (subsFeature.success) {
           this.featureData = subsFeature.feature;
           //TODO #6
           // plus nécessaire this.featureData.description = this.communeForm.value.communeName
           this.communeForm.reset();
           this.isCommuneLoading = false;
+          console.log(subsFeature.message);
+          console.log(this.featureData);
         } else {
           console.log(subsFeature.message);
           this.isCommuneLoading = false;
         }
-
-
       });
   }
 }
