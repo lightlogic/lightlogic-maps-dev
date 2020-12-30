@@ -60,15 +60,27 @@ router.get("/:communeName", (req, res, next) => {
     .set("Accept", "application/sparql-results+json")
     .set("Content-Type", "application/x-www-form-urlencoded")
     .then((response) => {
+      //TODO #9 Error handling when no commune (array length)
       //console.log(response.body.results.bindings.length);
-      const swisstopoFeature = new Feature({
-        id: null,
-        uri: response.body.results.bindings[0].Commune.value,
-        description: req.params.communeName,
-        wktGeometry: response.body.results.bindings[0].WKT.value,
-        projection: "EPSG:3857",
-      });
-      res.status(200).json(swisstopoFeature);
+      if (response.body.results.bindings.length == 1) {
+        const swisstopoFeature = new Feature({
+          id: 1,
+          uri: response.body.results.bindings[0].Commune.value,
+          description: req.params.communeName,
+          wktGeometry: response.body.results.bindings[0].WKT.value,
+          projection: "EPSG:3857",
+        });
+        res.status(200).json(swisstopoFeature);
+      } else {
+        const swisstopoFeature = new Feature({
+          id: null,
+          uri: null,
+          description: null,
+          wktGeometry: null,
+          projection: null
+        })
+        res.status(200).json(swisstopoFeature);
+      }
     });
 });
 

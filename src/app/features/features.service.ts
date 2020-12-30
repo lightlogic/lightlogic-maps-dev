@@ -10,7 +10,11 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
-  private swisstopoFeature = new Subject<Feature>();
+  private swisstopoSearchListener = new Subject<{
+    success: boolean;
+    message: any;
+    feature: Feature;
+  }>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -41,18 +45,36 @@ export class FeaturesService {
 
   addSwisstopoFeature(communeName: string) {
     this.http
-      .get<Feature>('http://localhost:3000/api/features/' + encodeURI(communeName))
+      .get<Feature>(
+        'http://localhost:3000/api/features/' + encodeURI(communeName)
+      )
       .subscribe((responseJson) => {
-       this.swisstopoFeature.next(responseJson);
+        let swisstopoResponse: {
+          success: boolean;
+          message: any;
+          feature: Feature;
+        } = null;
+        if (responseJson.description !== null) {
+          swisstopoResponse = {
+            success: true,
+            message: 'Service returned one result',
+            feature: responseJson,
+          };
+        } else {
+          swisstopoResponse = {
+            success: false,
+            message: 'Service returned no result, or request failed.',
+            feature: null,
+          };
+        }
+        this.swisstopoSearchListener.next(swisstopoResponse);
+        // not yet a good idea. To uncomment only when also added to dabase
+        //this.router.navigate(['/display']);
       });
   }
 
-  getSwisstopoFeatureListener() {
-    return this.swisstopoFeature.asObservable();
-  }
-
-  getFeatureUpdateListener() {
-    return this.featuresUpdated.asObservable();
+  getSwisstopoSearchListener() {
+    return this.swisstopoSearchListener.asObservable();
   }
 
   addCustomFeature(
@@ -81,6 +103,9 @@ export class FeaturesService {
         this.featuresUpdated.next([...this.features]);
         this.router.navigate(['/display']);
       });
+  }
+  getFeatureUpdateListener() {
+    return this.featuresUpdated.asObservable();
   }
 
   deleteFeature(featureId: string) {
