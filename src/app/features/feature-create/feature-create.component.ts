@@ -1,8 +1,5 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { Subscription } from 'rxjs';
-
-import { Feature } from '../feature.model';
 
 import { FeaturesService } from '../features.service';
 
@@ -11,13 +8,11 @@ import { FeaturesService } from '../features.service';
   templateUrl: './feature-create.component.html',
   styleUrls: ['./feature-create.component.css'],
 })
-export class FeatureCreateComponent implements OnInit, OnDestroy {
+export class FeatureCreateComponent implements OnInit {
   communeForm: FormGroup;
   featureForm: FormGroup;
   isCommuneLoading = false;
   private featureId: string;
-  private featureData: Feature;
-  private swisstopoSearchStatusSub: Subscription;
 
   constructor(public featuresService: FeaturesService) {}
 
@@ -52,24 +47,5 @@ export class FeatureCreateComponent implements OnInit, OnDestroy {
     this.featuresService.addSwisstopoFeature(
       this.communeForm.value.communeName
     );
-    this.swisstopoSearchStatusSub = this.featuresService
-      .getSwisstopoSearchListener()
-      .subscribe((subsFeature) => {
-        if (subsFeature.success) {
-          this.featureData = subsFeature.feature;
-          //TODO #6
-          // plus nécessaire this.featureData.description = this.communeForm.value.communeName
-          this.communeForm.reset();
-          this.isCommuneLoading = false;
-          console.log(subsFeature.message);
-          console.log(this.featureData);
-        } else {
-          console.log(subsFeature.message);
-          this.isCommuneLoading = false;
-        }
-      });
-  }
-  ngOnDestroy() {
-    this.swisstopoSearchStatusSub.unsubscribe();
   }
 }

@@ -10,11 +10,7 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
-  private swisstopoSearchListener = new Subject<{
-    success: boolean;
-    message: any;
-    feature: Feature;
-  }>();
+  //private swisstopoSearchListener = new Subject<Feature>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -45,36 +41,18 @@ export class FeaturesService {
 
   addSwisstopoFeature(communeName: string) {
     this.http
-      .get<Feature>(
+      .get<{ resError: string; resFeature: Feature }>(
         'http://localhost:3000/api/features/' + encodeURI(communeName)
       )
       .subscribe((responseJson) => {
-        let swisstopoResponse: {
-          success: boolean;
-          message: any;
-          feature: Feature;
-        } = null;
-        if (responseJson.description !== null) {
-          swisstopoResponse = {
-            success: true,
-            message: 'Service returned one result',
-            feature: responseJson,
-          };
+        if (responseJson.resError) {
+          console.log(responseJson.resError);
         } else {
-          swisstopoResponse = {
-            success: false,
-            message: 'Service returned no result, or request failed.',
-            feature: null,
-          };
+          this.features.push(responseJson.resFeature);
+          this.featuresUpdated.next([...this.features]);
+          this.router.navigate(['/display']);
         }
-        this.swisstopoSearchListener.next(swisstopoResponse);
-        // not yet a good idea. To uncomment only when also added to dabase
-        //this.router.navigate(['/display']);
       });
-  }
-
-  getSwisstopoSearchListener() {
-    return this.swisstopoSearchListener.asObservable();
   }
 
   addCustomFeature(
