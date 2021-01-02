@@ -10,7 +10,7 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
-  private swisstopoFeature = new Subject<Feature>();
+  //private swisstopoSearchListener = new Subject<Feature>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -41,18 +41,18 @@ export class FeaturesService {
 
   addSwisstopoFeature(communeName: string) {
     this.http
-      .get<Feature>('http://localhost:3000/api/features/' + encodeURI(communeName))
+      .get<{ resError: string; resFeature: Feature }>(
+        'http://localhost:3000/api/features/' + encodeURI(communeName)
+      )
       .subscribe((responseJson) => {
-       this.swisstopoFeature.next(responseJson);
+        if (responseJson.resError) {
+          console.log(responseJson.resError);
+        } else {
+          this.features.push(responseJson.resFeature);
+          this.featuresUpdated.next([...this.features]);
+          this.router.navigate(['/display']);
+        }
       });
-  }
-
-  getSwisstopoFeatureListener() {
-    return this.swisstopoFeature.asObservable();
-  }
-
-  getFeatureUpdateListener() {
-    return this.featuresUpdated.asObservable();
   }
 
   addCustomFeature(
@@ -81,6 +81,9 @@ export class FeaturesService {
         this.featuresUpdated.next([...this.features]);
         this.router.navigate(['/display']);
       });
+  }
+  getFeatureUpdateListener() {
+    return this.featuresUpdated.asObservable();
   }
 
   deleteFeature(featureId: string) {

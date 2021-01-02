@@ -1,10 +1,5 @@
-import { stringify } from '@angular/compiler/src/util';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, NgForm } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
-
-import { Feature } from '../feature.model';
+import { FormControl, FormGroup } from '@angular/forms';
 
 import { FeaturesService } from '../features.service';
 
@@ -18,13 +13,8 @@ export class FeatureCreateComponent implements OnInit {
   featureForm: FormGroup;
   isCommuneLoading = false;
   private featureId: string;
-  private featureData: Feature;
-  private swisstopoFeatureSub: Subscription;
 
-  constructor(
-    public featuresService: FeaturesService,
-    public route: ActivatedRoute
-  ) {}
+  constructor(public featuresService: FeaturesService) {}
 
   ngOnInit() {
     this.featureId = null;
@@ -54,16 +44,8 @@ export class FeatureCreateComponent implements OnInit {
 
   onAddCommune() {
     this.isCommuneLoading = true;
-    this.featuresService.addSwisstopoFeature(this.communeForm.value.communeName);
-    this.swisstopoFeatureSub = this.featuresService
-      .getSwisstopoFeatureListener()
-      .subscribe((subsFeature: Feature) => {
-        this.featureData = subsFeature;
-        //TODO #6
-        // plus nécessaire this.featureData.description = this.communeForm.value.communeName
-        console.log(this.featureData);
-        this.communeForm.reset;
-        this.isCommuneLoading = false;
-      });
+    this.featuresService.addSwisstopoFeature(
+      this.communeForm.value.communeName
+    );
   }
 }

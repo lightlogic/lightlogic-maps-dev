@@ -25,9 +25,6 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         (features: Feature[]) => {
           this.features = features;
           this.isLoading = false;
-        },
-        (error) => {
-          this.error = error.message;
         }
       );
   }
