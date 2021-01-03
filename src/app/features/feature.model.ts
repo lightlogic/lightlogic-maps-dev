@@ -4,4 +4,5 @@ export interface Feature {
   description: string;
   wktGeometry: string;
   projection: string;
+  selected: boolean;
 }

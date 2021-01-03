@@ -5,6 +5,7 @@ const featureSchema = mongoose.Schema({
   description: { type: String },
   wktGeometry: { type: String },
   projection: { type: String },
+  selected: { type: Boolean },
 });
 
-module.exports = mongoose.model('Feature', featureSchema);
+module.exports = mongoose.model("Feature", featureSchema);

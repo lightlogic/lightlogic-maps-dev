@@ -24,6 +24,7 @@ const getSwisstopoCommuneFeature = (communeName, callback) => {
           description: communeName,
           wktGeometry: res.body.results.bindings[0].WKT.value,
           projection: "EPSG:3857",
+          selected: false,
         });
         callback(undefined, swisstopoFeature);
       }

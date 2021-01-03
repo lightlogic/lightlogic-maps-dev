@@ -7,6 +7,7 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 
+
   public onMapReady(event) {
     console.log("Map Ready")
   }
