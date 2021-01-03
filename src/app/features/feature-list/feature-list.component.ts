@@ -12,28 +12,30 @@ export class FeatureListComponent implements OnInit, OnDestroy {
   isLoading = false;
   features: Feature[] = [];
   error = null;
-  private featuresSub: Subscription;
+  private featuresListSub: Subscription;
 
   constructor(public featuresService: FeaturesService) {}
 
   ngOnInit(): void {
     this.isLoading = true;
     this.featuresService.getFeatures();
-    this.featuresSub = this.featuresService
+    this.featuresListSub = this.featuresService
       .getFeatureUpdateListener()
-      .subscribe(
-        (features: Feature[]) => {
-          this.features = features;
-          this.isLoading = false;
-        }
-      );
+      .subscribe((features: Feature[]) => {
+        this.features = features;
+        this.isLoading = false;
+      });
   }
 
-  onDelete(featureId: string) {
+  onToggleFeatureSelection(featureId: string, selectionToSet: boolean) {
+    this.featuresService.toggleFeatureSelection(featureId, selectionToSet);
+  }
+
+  onDeleteFeature(featureId: string) {
     this.featuresService.deleteFeature(featureId);
   }
 
   ngOnDestroy() {
-    this.featuresSub.unsubscribe();
+    this.featuresListSub.unsubscribe();
   }
 }

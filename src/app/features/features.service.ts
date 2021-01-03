@@ -10,7 +10,7 @@ import { Feature } from './feature.model';
 export class FeaturesService {
   private features: Feature[] = [];
   private featuresUpdated = new Subject<Feature[]>();
-  //private swisstopoSearchListener = new Subject<Feature>();
+  private featuresSelected = new Subject<Feature[]>();
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -27,6 +27,7 @@ export class FeaturesService {
               description: feature.description,
               wktGeometry: feature.wktGeometry,
               projection: feature.projection,
+              selected: feature.selected,
               id: feature._id,
             };
           });
@@ -60,7 +61,8 @@ export class FeaturesService {
     uri: string,
     description: string,
     wktGeometry: string,
-    projection: string
+    projection: string,
+    selected: boolean
   ) {
     const feature: Feature = {
       id: null,
@@ -68,6 +70,7 @@ export class FeaturesService {
       description: description,
       wktGeometry: wktGeometry,
       projection: projection,
+      selected: false,
     };
     this.http
       .post<{ message: string; featureId: string }>(
@@ -82,6 +85,7 @@ export class FeaturesService {
         this.router.navigate(['/display']);
       });
   }
+
   getFeatureUpdateListener() {
     return this.featuresUpdated.asObservable();
   }
@@ -99,5 +103,24 @@ export class FeaturesService {
         this.features = featuresWithoutTheDeleted;
         this.featuresUpdated.next([...this.features]);
       });
+  }
+
+  toggleFeatureSelection(featureId: string, selectionToSet: boolean) {
+    const selectedValue = {
+      selected: selectionToSet
+    }
+    this.http
+      .patch(
+        'http://localhost:3000/api/features/select/' + featureId,
+        selectedValue
+      )
+      .subscribe(() => {
+        this.features.find(x => x.id === featureId).selected = selectionToSet;
+        this.featuresUpdated.next([...this.features]);
+      });
+  }
+
+  getFeaturesSelectedListener() {
+    return this.featuresSelected.asObservable();
   }
 }

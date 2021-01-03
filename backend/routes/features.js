@@ -19,6 +19,7 @@ router.post("", (req, res, next) => {
     description: req.body.description,
     wktGeometry: req.body.wktGeometry,
     projection: req.body.projection,
+    selected: false,
   });
   feature.save().then((createdFeature) => {
     res.status(201).json({
@@ -43,7 +44,18 @@ router.get("", (req, res, next) => {
 // path: /api/features/fi111jej3iojofidj
 router.delete("/:id", (req, res, next) => {
   Feature.deleteOne({ _id: req.params.id }).then((result) => {
-    res.status(200).json({ message: "Post deleted" });
+    res.status(200).json({ message: "Feature deleted" });
+  });
+});
+
+// methode PATCH
+// path: /api/features/select/fi111jej3iojofidj
+router.patch("/select/:id", (req, res, next) => {
+  Feature.updateOne(
+    { _id: req.params.id },
+    { selected: req.body.selected }
+  ).then((result) => {
+    res.status(200).json({ message: "Feature selected" });
   });
 });
 

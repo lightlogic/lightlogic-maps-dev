@@ -37,7 +37,8 @@ export class FeatureCreateComponent implements OnInit {
       this.featureForm.value.uri,
       this.featureForm.value.description,
       this.featureForm.value.wktGeometry,
-      this.featureForm.value.projection
+      this.featureForm.value.projection,
+      false // default value for "selected"
     );
     this.featureForm.reset;
   }
