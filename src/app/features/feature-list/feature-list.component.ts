@@ -18,7 +18,7 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.isLoading = true;
-    this.featuresService.getFeatures();
+    //this.featuresService.getFeatures();
     this.featuresListSub = this.featuresService
       .getFeatureUpdateListener()
       .subscribe((features: Feature[]) => {
