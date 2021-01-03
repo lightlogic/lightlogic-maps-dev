@@ -29,7 +29,6 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   onToggleFeatureSelection(featureId: string, selectionToSet: boolean) {
     this.featuresService.toggleFeatureSelection(featureId, selectionToSet);
-    //TODO update selected status on the Feature list
   }
 
   onDeleteFeature(featureId: string) {

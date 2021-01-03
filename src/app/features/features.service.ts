@@ -115,6 +115,7 @@ export class FeaturesService {
         selectedValue
       )
       .subscribe(() => {
+        this.features.find(x => x.id === featureId).selected = selectionToSet;
         this.featuresUpdated.next([...this.features]);
       });
   }
