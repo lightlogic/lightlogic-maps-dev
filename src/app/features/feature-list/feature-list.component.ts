@@ -1,16 +1,22 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Subscription } from 'rxjs';
+
 import { Feature } from '../feature.model';
 import { FeaturesService } from '../features.service';
-
 @Component({
   selector: 'app-feature-list',
   templateUrl: './feature-list.component.html',
   styleUrls: ['./feature-list.component.css'],
 })
 export class FeatureListComponent implements OnInit, OnDestroy {
+  // Features
   isLoading = false;
   features: Feature[] = [];
+  featuresSelected: Feature[] = [];
   error = null;
   private featuresListSub: Subscription;
 
@@ -23,8 +29,15 @@ export class FeatureListComponent implements OnInit, OnDestroy {
       .getFeatureUpdateListener()
       .subscribe((features: Feature[]) => {
         this.features = features;
+        this.featuresSelected = features.filter(
+          (feature) => feature.selected == true
+        );
         this.isLoading = false;
       });
+  }
+
+  ngOnDestroy() {
+    this.featuresListSub.unsubscribe();
   }
 
   onToggleFeatureSelection(featureId: string, selectionToSet: boolean) {
@@ -33,9 +46,5 @@ export class FeatureListComponent implements OnInit, OnDestroy {
 
   onDeleteFeature(featureId: string) {
     this.featuresService.deleteFeature(featureId);
-  }
-
-  ngOnDestroy() {
-    this.featuresListSub.unsubscribe();
   }
 }
