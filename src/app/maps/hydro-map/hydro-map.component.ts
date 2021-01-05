@@ -1,8 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Map } from 'ol';
 import { Subscription } from 'rxjs';
@@ -17,7 +13,6 @@ import { Feature } from '../../features/feature.model';
   styleUrls: ['hydro-map.component.css'],
 })
 export class HydroMapComponent implements OnInit, OnDestroy {
-
   Map: Map;
   features: Feature[] = [];
   private featuresListSub: Subscription;
@@ -37,11 +32,15 @@ export class HydroMapComponent implements OnInit, OnDestroy {
         );
         if (!this.Map) {
           this.Map = this.mapsService.initMap();
-          this.Map.addLayer(this.mapsService.getSelectedCommunesLayer(featuresSelected));
+          this.Map.addLayer(
+            this.mapsService.getSelectedCommunesLayer(featuresSelected)
+          );
         } else {
           this.Map.dispose();
           this.Map = this.mapsService.initMap();
-          this.Map.addLayer(this.mapsService.getSelectedCommunesLayer(featuresSelected));
+          this.Map.addLayer(
+            this.mapsService.getSelectedCommunesLayer(featuresSelected)
+          );
         }
       });
   }
