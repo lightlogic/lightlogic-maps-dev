@@ -9,14 +9,20 @@ import { WMTS as WMTSSource } from 'ol/source';
 import WMTStileGrid from 'ol/tilegrid/WMTS';
 import { WKT } from 'ol/format';
 import proj4 from 'proj4';
-import {register} from 'ol/proj/proj4';
+import { register } from 'ol/proj/proj4';
 
 import { Feature } from '../features/feature.model';
+import Control from 'ol/control/Control';
 
 @Injectable({ providedIn: 'root' })
 export class MapsService {
-  initMap() {
-    proj4.defs("EPSG:2056","+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs");
+  initMap(layerConfig, vCenter, vResolution) {
+    // Proj4js is a JavaScript library to transform point coordinates from one coordinate system to another
+    // https://github.com/proj4js/proj4js
+    proj4.defs(
+      'EPSG:2056',
+      '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
+    );
     register(proj4);
     const RESOLUTIONS = [
       4000,
@@ -36,8 +42,8 @@ export class MapsService {
       650,
       500,
       250,
-       100,
-       50,
+      100,
+      50,
       20,
       10,
       5,
@@ -47,23 +53,21 @@ export class MapsService {
       1,
       0.5,
     ];
-    //EPSG:3857
-    //const myExtent: olExtent.Extent = [5.140242, 45.398181, 11.47757, 48.230651];
+    var myMatrixIds = [];
+    for (var i = 0; i < RESOLUTIONS.length; i++) {
+      myMatrixIds.push(i);
+    }
+
     //EPSG:2056
-    const myExtent: olExtent.Extent = [2420000, 130000, 2900000, 1350000];
-    const myProjection: Projection = olProj.get('EPSG:2056');
-    myProjection.setExtent(myExtent);
+    const mExtent: olExtent.Extent = layerConfig.extent;
+    const epsgProjection: Projection = olProj.get(layerConfig.epsgProjCode);
+    epsgProjection.setExtent(mExtent);
 
     // view
     const myView = new View({
-      center: [2573902.1157, 1198145.9932],
-      projection: myProjection,
-      resolution: 750,
-      //zoom: 15,
-      //maxZoom: 19,
-      //minZoom: 2,
-      //center: [902568.5270415349, 5969980.338127118],
-      //center: [46.94078, 7.09297],
+      center: vCenter,
+      projection: epsgProjection,
+      resolution: vResolution,
     });
     // Map object
     const myMap = new Map({
@@ -71,42 +75,47 @@ export class MapsService {
       target: 'map',
     });
 
-    // Base Layers
-    // Openstreet Map Standard
-    const openstreetMapStandard = new Tile({
-      source: new OSM(),
-      visible: true,
-      zIndex: 0,
-    });
-    //myMap.addLayer(openstreetMapStandard);
-
-    var myMatrixIds = [];
-    for (var i = 0; i < RESOLUTIONS.length; i++) {
-      myMatrixIds.push(i);
-    }
+    let attrArray: string[] = [];
+    attrArray.push(
+      layerConfig.attribution.forEach((attrElement) => {
+        const aText =
+          '<a href="' +
+          attrElement.attrURL +
+          '" target="_blank">' +
+          attrElement.attrTitle +
+          '</a>';
+      })
+    );
+    let attrString = attrArray.join(' ');
 
     const myTileGrid = new WMTStileGrid({
-      origin: [myExtent[0], myExtent[3]],
+      origin: [mExtent[0], mExtent[3]],
       resolutions: RESOLUTIONS,
       matrixIds: myMatrixIds,
     });
-    const swisstopoLayer = new Tile({
+    const baseMapLayer = new Tile({
       source: new WMTSSource({
-        url:
-          'https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.vec25-gewaessernetz_referenz/default/current/2056/{TileMatrix}/{TileCol}/{TileRow}.png',
+        url: layerConfig.sourceUrl,
         tileGrid: myTileGrid,
-        projection: myProjection,
-        layer: 'ch.swisstopo.vec25-gewaessernetz_referenz',
+        projection: layerConfig.epsgProjCode,
+        layer: layerConfig.layerName,
         requestEncoding: 'REST',
         style: 'default',
-        matrixSet: '2056_27',
+        matrixSet: layerConfig.matrixSet,
+        //TODO attribution not working. See Udemy approach
+        attributions: attrString,
       }),
     });
-    myMap.addLayer(swisstopoLayer);
+    myMap.addLayer(baseMapLayer);
     return myMap;
   }
 
   getSelectedCommunesLayer<LayerVector>(featuresSelected: Feature[]) {
+    proj4.defs(
+      'EPSG:2056',
+      '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
+    );
+    register(proj4);
     let communesLimitsWKT = [];
 
     featuresSelected.forEach((feature) => {
@@ -122,7 +131,7 @@ export class MapsService {
       communesFeatures.push(
         format.readFeature(feature.wktGeom, {
           dataProjection: 'EPSG:4326', // projection of WKT data
-          featureProjection: 'EPSG:3857', // projection of Map and View
+          featureProjection: 'EPSG:2058', // projection of Map and View
         })
       );
     });
