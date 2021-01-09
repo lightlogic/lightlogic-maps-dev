@@ -1,0 +1,5 @@
+{
+  "env": {
+    "MONGO_ATLAS_CONN": "mongodb+srv://gero102:oTC23krD-FDc.g8M0Gb@cluster0.65rz0.mongodb.net/lightlogicmaps?retryWrites=true"
+  }
+}

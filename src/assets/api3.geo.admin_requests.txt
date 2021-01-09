@@ -1,0 +1,5 @@
+FeatureSearch
+https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=Mont-Vully&type=featuresearch&features=ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill&sr=2056
+
+Geometry Request
+http://api3.geo.admin.ch/rest/services/api/MapServer/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/2284?geometryFormat=geojson&sr=2056
