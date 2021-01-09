@@ -11,8 +11,8 @@ import layerConf_GewaessernetzReferenz from '../layerConfig/geo.admin.ch/ch_swis
 import layerConf_LandeskartenGrau from '../layerConfig/geo.admin.ch/ch_swisstopo_pixelkarte_grau.json';
 @Component({
   selector: 'app-hydro-map',
-  templateUrl: 'hydro-map.component.html',
-  styleUrls: ['hydro-map.component.css'],
+  templateUrl: 'geomap.component.html',
+  styleUrls: ['geomap.component.css'],
 })
 export class HydroMapComponent implements OnInit, OnDestroy {
   Map: Map;

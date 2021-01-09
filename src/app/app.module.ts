@@ -12,7 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { HeaderComponent } from './header/header.component';
-import { HydroMapComponent } from './maps/hydro-map/hydro-map.component';
+import { HydroMapComponent } from './maps/geomap/geomap.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
