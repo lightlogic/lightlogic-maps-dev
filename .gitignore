@@ -47,4 +47,4 @@ Thumbs.db
 
 # secret configuration files
 # mongoDB config
-backend/secrets.js
+nodemon.json
