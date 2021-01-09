@@ -3,6 +3,7 @@ export interface Feature {
   uri: string;
   description: string;
   wktGeometry: string;
+  geoJSONraw: string;
   projection: string;
   selected: boolean;
 }

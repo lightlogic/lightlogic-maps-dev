@@ -49,9 +49,10 @@ export class FeaturesService {
         if (responseJson.resError) {
           console.log(responseJson.resError);
         } else {
-          this.features.push(responseJson.resFeature);
-          this.featuresUpdated.next([...this.features]);
-          this.router.navigate(['/display']);
+          console.log(responseJson);
+          // this.features.push(responseJson.resFeature);
+          // this.featuresUpdated.next([...this.features]);
+          // this.router.navigate(['/display']);
         }
       });
   }
@@ -61,6 +62,7 @@ export class FeaturesService {
     uri: string,
     description: string,
     wktGeometry: string,
+    geoJSONraw: string,
     projection: string,
     selected: boolean
   ) {
@@ -69,6 +71,7 @@ export class FeaturesService {
       uri: uri,
       description: description,
       wktGeometry: wktGeometry,
+      geoJSONraw: "null",
       projection: projection,
       selected: false,
     };

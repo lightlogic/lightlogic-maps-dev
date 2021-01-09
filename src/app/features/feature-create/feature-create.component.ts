@@ -27,7 +27,8 @@ export class FeatureCreateComponent implements OnInit {
       uri: new FormControl(null),
       description: new FormControl(null),
       wktGeometry: new FormControl(null),
-      projection: new FormControl('EPSG:3857'),
+      geoJSONraw: new FormControl(null),
+      projection: new FormControl('EPSG:2058'),
     });
   }
 
@@ -37,6 +38,7 @@ export class FeatureCreateComponent implements OnInit {
       this.featureForm.value.uri,
       this.featureForm.value.description,
       this.featureForm.value.wktGeometry,
+      this.featureForm.value.geoJSONraw,
       this.featureForm.value.projection,
       false // default value for "selected"
     );

@@ -4,6 +4,7 @@ const featureSchema = mongoose.Schema({
   uri: { type: String, required: true },
   description: { type: String },
   wktGeometry: { type: String },
+  geoJSONraw: { type: Object},
   projection: { type: String },
   selected: { type: Boolean },
 });

@@ -1,6 +1,7 @@
 const express = require("express");
 const request = require("superagent");
 const bodyparser = require("body-parser");
+const colors = require("colors");
 
 const Feature = require("../models/feature");
 const getSwisstopoCommuneFeature = require("../utils/swisstopoCommuneFeatures");
@@ -64,9 +65,21 @@ router.get("/:communeName", (req, res, next) => {
     if (error) {
       console.log(error);
     } else {
-      const swisstopoFeature = new Feature(data);
-      swisstopoFeature.save();
-      res.status(201).json(data);
+      console.log(colors.magenta(data));
+      const swisstopoFeature = new Feature({
+        uri: data.featureId,
+        description: data.properties.label,
+        wktGeometry: "null",
+        geoJSONraw: data,
+        projection: "EPSG:2058",
+        selected: false,
+      });
+      swisstopoFeature.save().then((createdFeature) => {
+        res.status(200).json({
+          message: "Commune " + data.properties.label + " found.",
+          feature: data,
+        });
+      });
     }
   });
 });
