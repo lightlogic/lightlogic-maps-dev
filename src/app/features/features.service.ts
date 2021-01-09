@@ -42,14 +42,14 @@ export class FeaturesService {
 
   addSwisstopoFeature(communeName: string) {
     this.http
-      .get<{ resError: string; resFeature: Feature }>(
-        'http://localhost:3000/api/features/' + encodeURI(communeName)
+      .post<{ message: string; feature: Feature }>(
+        'http://localhost:3000/api/features/swisstopo', encodeURI(communeName)
       )
       .subscribe((responseJson) => {
-        if (responseJson.resError) {
-          console.log(responseJson.resError);
+        if (responseJson.feature) {
+          console.log(responseJson.feature);
         } else {
-          console.log(responseJson);
+          console.log(responseJson.message);
           // this.features.push(responseJson.resFeature);
           // this.featuresUpdated.next([...this.features]);
           // this.router.navigate(['/display']);
@@ -77,7 +77,7 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; featureId: string }>(
-        'http://localhost:3000/api/features',
+        'http://localhost:3000/api/features/custom',
         feature
       )
       .subscribe((responseData) => {

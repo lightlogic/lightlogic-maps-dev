@@ -12,7 +12,7 @@ router.use(bodyparser.json());
 
 // method POST
 // path: /api/features
-router.post("", (req, res, next) => {
+router.post("/custom", (req, res, next) => {
   // req.body is a new object added to the request by body-parser
   const feature = new Feature({
     //id: req.body.id,
@@ -60,8 +60,8 @@ router.patch("/select/:id", (req, res, next) => {
   });
 });
 
-router.get("/:communeName", (req, res, next) => {
-  getSwisstopoCommuneFeature(req.params.communeName, (error, data) => {
+router.post("/swisstopo", (req, res, next) => {
+  getSwisstopoCommuneFeature(req.body.communeName, (error, data) => {
     if (error) {
       console.log(error);
     } else {
