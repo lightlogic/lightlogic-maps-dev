@@ -1,32 +1,19 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
+const colors = require("colors");
 
 const featuresRoutes = require('./routes/features');
 
-const env = "development";
-const config = require("./secrets.js")[env];
-
 const app = express();
 
-const mongoConnectURL =
-  "mongodb+srv://" +
-  config.database.mongoUser +
-  ":" +
-  config.database.mongoPass +
-  "@" +
-  config.database.mongoHost +
-  "/" +
-  config.database.mongoDBname +
-  "?retryWrites=true";
-
 mongoose
-  .connect(mongoConnectURL)
+  .connect(process.env.MONGO_ATLAS_CONN)
   .then(() => {
-    console.log("Connected to the database.");
+    console.log(colors.green("Connected to the database."));
   })
   .catch(() => {
-    console.log("Connection failed.");
+    console.log(colors.red("Connection failed."));
   });
 
 // body-parser acts as an express middleware
