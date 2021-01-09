@@ -8,6 +8,8 @@ const featuresRoutes = require('./routes/features');
 const app = express();
 
 mongoose
+  // Mongo connection string example
+  // mongodb+srv://myDummyUser:myDummyPassword@myMongoSererHost/myDatabaseName?retryWrites=true
   .connect(process.env.MONGO_ATLAS_CONN)
   .then(() => {
     console.log(colors.green("Connected to the database."));

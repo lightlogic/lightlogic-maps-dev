@@ -147,6 +147,12 @@
       "element",
       "app",
       "kebab-case"
-    ]
+    ],
+    "linterOptions": {
+        "exclude": [
+           "*.json",
+           "**/*.json"
+        ]
+    }
   }
 }
