@@ -40,9 +40,12 @@ export class FeaturesService {
   }
 
   addSwisstopoFeature(communeName: string) {
+    const newCommune = {
+      commName: communeName
+    }
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo', encodeURI(communeName)
+        'http://localhost:3000/api/features/swisstopo', newCommune
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
@@ -52,6 +55,7 @@ export class FeaturesService {
           this.router.navigate(['/display']);
         } else {
           console.log(responseJson.message);
+          this.router.navigate(['/display']);
         }
       });
   }

@@ -21,7 +21,6 @@ module.exports = {
         if (err) {
           callback(err);
         } else if (res.body.results.bindings.length == 1) {
-          //console.log(colors.magenta(res.body.results.bindings[0]))
           const adminUnitRes = new AdminUnit({
             uri: res.body.results.bindings[0].communeUri.value,
             bfsNum: res.body.results.bindings[0].bfsNum.value,
@@ -31,31 +30,6 @@ module.exports = {
             parentName: res.body.results.bindings[0].cantonName.value,
           });
           callback(undefined, adminUnitRes);
-        }
-      });
-  },
-  getSwisstopoCommuneFeature: function (communeName, callback) {
-    getBFSCommuneData("Ins", console.error());
-    request
-      .get(
-        "http://api3.geo.admin.ch/rest/services/api/MapServer/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/2271?geometryFormat=geojson&sr=2056"
-      )
-      .end((err, res) => {
-        if (err) {
-          callback(err);
-        } else {
-          //       console.log(colors.magenta(res.body))
-          //      const swisstopoFeature = new Feature({
-          // //       id: 1,
-          //          uri: res.body.feature.featureId,
-          //          description: res.body.feature.properties.label,
-          // //       wktGeometry: res.body.results.bindings[0].WKT.value,
-          //          projection: "EPSG:2058",
-          //        selected: false,
-          //     });
-          //    callback(undefined, swisstopoFeature);
-          callback(undefined, res.body.feature);
-          //   }
         }
       });
   },

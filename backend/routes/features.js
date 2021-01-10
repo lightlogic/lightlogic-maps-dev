@@ -5,6 +5,7 @@ const colors = require("colors");
 
 const Feature = require("../models/feature");
 const ldgeoadminModule = require("../utils/ldgeoadminUtils");
+const apigeoadminModule = require("../utils/apigeoadminUtils");
 const AdminUnit = require("../models/adminUnit");
 const feature = require("../models/feature");
 
@@ -16,42 +17,59 @@ router.use(bodyparser.json());
 // method POST
 // path: /api/features/swisstopo
 router.post("/swisstopo", (req, res, next) => {
-  AdminUnit.findOne({ name: "Ins" }, (error, auData) => {
+  AdminUnit.findOne({ name: req.body.commName }, (error, auData) => {
     if (auData == undefined) {
-      ldgeoadminModule.getBFScommuneData("Ins", (cerror, communeData) => {
+      ldgeoadminModule.getBFScommuneData(req.body.commName, (cerror, communeData) => {
         if (cerror) {
           console.log(colors.red(cerror));
         } else {
           communeData.save().then((createAdminUnit) => {
-            communeFeature = new Feature({
-              geoJSONraw: "{blabla geoJSON}",
-              featureOf: createAdminUnit._id,
-            });
-            communeFeature.save().then((createdFeature) => {
-              res.status(201).json({
-                message: "Commune and geoJSON retrieved and cached.",
-                feature: createdFeature,
-              });
-            });
+            apigeoadminModule.getCommuneGeoJSON(
+              createAdminUnit.bfsNum,
+              (gerror, geoJsonData) => {
+                if (gerror) {
+                  console.log(colors.red(gerror));
+                } else {
+                  communeFeature = new Feature({
+                    geoJSONraw: geoJsonData,
+                    featureOf: createAdminUnit._id,
+                  });
+                  communeFeature.save().then((createdFeature) => {
+                    res.status(201).json({
+                      message: "Commune and geoJSON retrieved and cached.",
+                      feature: createdFeature,
+                    });
+                  });
+                }
+              }
+            );
           });
         }
       });
     } else {
       Feature.findOne({ featureOf: auData._id }, (ferror, fData) => {
-        //Feature.findOne({ featureOf: "1" }, (ferror, fData) => {
         if (ferror) {
           console.log(colors.red(ferror));
         } else if (fData == undefined) {
-          communeFeature = new Feature({
-            geoJSONraw: "{blabla geoJSON}",
-            featureOf: auData._id,
-          });
-          communeFeature.save().then((createdFeature) => {
-            res.status(201).json({
-              message: "geoJSON retrieved and cached.",
-              feature: createdFeature,
-            });
-          });
+          apigeoadminModule.getCommuneGeoJSON(
+            auData.bfsNum,
+            (gerror, geoJsonData) => {
+              if (gerror) {
+                console.log(colors.red(gerror));
+              } else {
+                communeFeature = new Feature({
+                  geoJSONraw: geoJsonData,
+                  featureOf: auData._id,
+                });
+                communeFeature.save().then((createdFeature) => {
+                  res.status(201).json({
+                    message: "Commune and geoJSON retrieved and cached.",
+                    feature: createdFeature,
+                  });
+                });
+              }
+            }
+          );
         } else {
           res.status(200).json({
             message: "Feature allready existed. No data added.",
@@ -62,68 +80,6 @@ router.post("/swisstopo", (req, res, next) => {
     }
   });
 });
-// ldgeoadminModule.addCommuneFeature("Ins", (error, data) => {
-//   if (error) {
-//     console.log(colors.red(error));
-//   } else {
-//     filter = { uri: data.uri };
-//     update = data;
-//     options = { upsert: true, new: true, setDefaultsOnInsert: true };
-//     AdminUnit.findOneAndUpdate(filter, update, options, function(error, results) {
-//       if (error) {
-//         console.log(colors.red(error))
-//         communeFeature = new Feature({
-//             geoJSONraw: "{blabla geoJSON}",
-//             featureOf: results._id,
-//         });
-//         ffilter = {featureOf: results._id };
-//         fupdate = communeFeature;
-//         Feature.findOneAndUpdate(ffilter, fupdate, options, function(error, fresults) {
-//           if (error) {
-//             console.log(colors.white(error))
-//           } else {
-//             console.log(colors.magenta(fresults))
-//           }
-//         })
-//       } else {
-//         console.log(colors.magenta(results));
-//       }
-//     })
-//     // data.save().then((createdAdminUnit) => {
-//     //   //console.log(colors.green(createdAdminUnit._id));
-//     //   communeFeature = new Feature({
-//     //     geoJSONraw: "{blabla geoJSON}",
-//     //     featureOf: createdAdminUnit._id,
-//     //   });
-//     //   communeFeature.save().then((createdFeature) => {
-//     //     console.log(colors.magenta(createdFeature));
-//     //   });
-//     // });
-//     }
-//   });
-// });
-
-// ldgeoadminModule.getSwisstopoCommuneFeature(req.body.communeName, (error, data) => {
-//   if (error) {
-//     console.log(error);
-//   } else {
-//     console.log(colors.white(data));
-//     const swisstopoFeature = new Feature({
-//       uri: data.featureId,
-//       description: data.properties.label,
-//       wktGeometry: "null",
-//       geoJSONraw: data,
-//       projection: "EPSG:2058",
-//       selected: false,
-//     });
-//     swisstopoFeature.save().then((createdFeature) => {
-//       res.status(200).json({
-//         message: "Commune " + data.properties.label + " found.",
-//         feature: data,
-//       });
-//     });
-//   }
-// });
 
 // post custom feature from the formular
 // method POST
