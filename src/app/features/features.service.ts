@@ -23,12 +23,11 @@ export class FeaturesService {
         map((featureData) => {
           return featureData.features.map((feature) => {
             return {
-              uri: feature.uri,
-              description: feature.description,
-              wktGeometry: feature.wktGeometry,
-              projection: feature.projection,
-              selected: feature.selected,
               id: feature._id,
+              featureOf: feature.featureOf,
+              projection: feature.projection,
+              geoJSONraw: feature.geoJSONraw,
+              selected: feature.selected,
             };
           });
         })
@@ -48,32 +47,27 @@ export class FeaturesService {
       .subscribe((responseJson) => {
         if (responseJson.feature) {
           console.log(responseJson.feature);
+          this.features.push(responseJson.feature);
+          this.featuresUpdated.next([...this.features]);
+          this.router.navigate(['/display']);
         } else {
           console.log(responseJson.message);
-          // this.features.push(responseJson.resFeature);
-          // this.featuresUpdated.next([...this.features]);
-          // this.router.navigate(['/display']);
         }
       });
   }
 
   addCustomFeature(
     id: string,
-    uri: string,
-    description: string,
-    wktGeometry: string,
     geoJSONraw: string,
     projection: string,
     selected: boolean
   ) {
     const feature: Feature = {
       id: null,
-      uri: uri,
-      description: description,
-      wktGeometry: wktGeometry,
-      geoJSONraw: "null",
+      geoJSONraw: geoJSONraw,
       projection: projection,
       selected: false,
+      featureOf: 'null',
     };
     this.http
       .post<{ message: string; featureId: string }>(

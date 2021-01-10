@@ -26,17 +26,6 @@
   <mat-card-content>
     <form [formGroup]="featureForm" (ngSubmit)="onAddFeature()">
       <mat-form-field>
-        <input matInput type="text" id="uri" formControlName="uri" class="form-control" placeholder="URI" required />
-      </mat-form-field>
-      <mat-form-field>
-        <input matInput type="text" id="description" formControlName="description" class="form-control"
-          placeholder="Description" required />
-      </mat-form-field>
-      <mat-form-field>
-        <textarea matInput rows="4" id="wktGeometry" formControlName="wktGeometry" class="form-control"
-          placeholder="WKT polygon coordinates"></textarea>
-      </mat-form-field>
-      <mat-form-field>
         <textarea matInput rows="4" id="geoJSONraw" formControlName="geoJSONraw" class="form-control"
           placeholder="Raw GeoJSON"></textarea>
       </mat-form-field>

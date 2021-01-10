@@ -1,12 +1,10 @@
 const mongoose = require("mongoose");
 
 const featureSchema = mongoose.Schema({
-  uri: { type: String, required: true },
-  description: { type: String },
-  wktGeometry: { type: String },
   geoJSONraw: { type: Object},
-  projection: { type: String },
-  selected: { type: Boolean },
+  projection: { type: String, default: "EPSG:2058" },
+  selected: { type: Boolean, default: false },
+  featureOf: {type: mongoose.Schema.Types.ObjectId, ref: "AdminUnit", required: true}
 });
 
 module.exports = mongoose.model("Feature", featureSchema);
