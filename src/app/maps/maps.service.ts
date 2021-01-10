@@ -131,7 +131,7 @@ export class MapsService {
       crs: {
         type: 'name',
         properties: {
-          name: 'EPSG:2058',
+          name: 'EPSG:2056',
         },
       },
       features: [
@@ -272,8 +272,8 @@ export class MapsService {
 
     // let format = new GeoJSON();
     // format.readFeature(geoJsonString, {
-    //   dataProjection: 'EPSG:2058', // projection of WKT data
-    //   featureProjection: 'EPSG:2058', // projection of Map and View
+    //   dataProjection: 'EPSG:2056', // projection of WKT data
+    //   featureProjection: 'EPSG:2056', // projection of Map and View
     // });
 
     var myVsource = new VectorSource({
@@ -281,8 +281,8 @@ export class MapsService {
     });
     // console.log(geoJsonString);
     // const myFeature = format.readFeature(geoJsonString, {
-    //   dataProjection: 'EPSG:2058', // projection of WKT data
-    //   featureProjection: 'EPSG:2058', // projection of Map and View
+    //   dataProjection: 'EPSG:2056', // projection of WKT data
+    //   featureProjection: 'EPSG:2056', // projection of Map and View
     // });
     // let format = new WKT();
     // let communesFeatures = [];
@@ -290,7 +290,7 @@ export class MapsService {
     //   communesFeatures.push(
     //     format.readFeature(feature.wktGeom, {
     //       dataProjection: 'EPSG:4326', // projection of WKT data
-    //       featureProjection: 'EPSG:2058', // projection of Map and View
+    //       featureProjection: 'EPSG:2056', // projection of Map and View
     //     })
     //   );
     // });
