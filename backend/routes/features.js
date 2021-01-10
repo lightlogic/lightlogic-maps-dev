@@ -33,6 +33,8 @@ router.post("/swisstopo", (req, res, next) => {
                   communeFeature = new Feature({
                     geoJSONraw: geoJsonData,
                     featureOf: createAdminUnit._id,
+                    featureOfLabel: createAdminUnit.name,
+                    featureOfbfsNum: createAdminUnit.bfsNum
                   });
                   communeFeature.save().then((createdFeature) => {
                     res.status(201).json({
@@ -60,6 +62,8 @@ router.post("/swisstopo", (req, res, next) => {
                 communeFeature = new Feature({
                   geoJSONraw: geoJsonData,
                   featureOf: auData._id,
+                  featureOfLabel: auData.name,
+                  featureOfbfsNum: auData.bfsNum
                 });
                 communeFeature.save().then((createdFeature) => {
                   res.status(201).json({

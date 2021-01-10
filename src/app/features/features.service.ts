@@ -28,6 +28,8 @@ export class FeaturesService {
               projection: feature.projection,
               geoJSONraw: feature.geoJSONraw,
               selected: feature.selected,
+              featureOfLabel: feature.featureOfLabel,
+              featureOfbfsNum: feature.featureOfbfsNum,
             };
           });
         })
@@ -41,11 +43,12 @@ export class FeaturesService {
 
   addSwisstopoFeature(communeName: string) {
     const newCommune = {
-      commName: communeName
-    }
+      commName: communeName,
+    };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo', newCommune
+        'http://localhost:3000/api/features/swisstopo',
+        newCommune
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
@@ -72,6 +75,8 @@ export class FeaturesService {
       projection: projection,
       selected: false,
       featureOf: 'null',
+      featureOfLabel: 'null',
+      featureOfbfsNum: 0,
     };
     this.http
       .post<{ message: string; featureId: string }>(
@@ -108,15 +113,15 @@ export class FeaturesService {
 
   toggleFeatureSelection(featureId: string, selectionToSet: boolean) {
     const selectedValue = {
-      selected: selectionToSet
-    }
+      selected: selectionToSet,
+    };
     this.http
       .patch(
         'http://localhost:3000/api/features/select/' + featureId,
         selectedValue
       )
       .subscribe(() => {
-        this.features.find(x => x.id === featureId).selected = selectionToSet;
+        this.features.find((x) => x.id === featureId).selected = selectionToSet;
         this.featuresUpdated.next([...this.features]);
       });
   }

@@ -4,4 +4,6 @@ export interface Feature {
   projection: string;
   selected: boolean;
   featureOf: string;
+  featureOfLabel: string;
+  featureOfbfsNum: number;
 }
