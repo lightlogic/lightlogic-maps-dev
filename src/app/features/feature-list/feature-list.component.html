@@ -4,17 +4,16 @@
     <mat-expansion-panel-header>
       <span>
         <div *ngIf="feature.selected; else elseTitleBlock">
-          <b>{{ feature.description }}</b>
+          <b>{{ feature.featureOfLabel }}</b>
         </div>
-        <ng-template #elseTitleBlock>{{ feature.description }}</ng-template>
+        <ng-template #elseTitleBlock>{{ feature.featureOfLabel }}</ng-template>
       </span>
       <span class="spacer"></span>
       <ul>
-        <li>{{ feature.uri }}&nbsp;</li>
+        <li>{{ feature.featureOfbfsNum }}&nbsp;</li>
       </ul>
     </mat-expansion-panel-header>
-    <p>{{ feature.id}}</p>
-    <p>{{ feature.selected }}</p>
+    <p>Projection: {{ feature.projection}}</p>
     <!-- <p>{{ feature.wktGeometry }}</p> -->
     <mat-action-row>
 

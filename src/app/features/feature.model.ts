@@ -1,8 +1,9 @@
 export interface Feature {
   id: string;
-  uri: string;
-  description: string;
-  wktGeometry: string;
+  geoJSONraw: object;
   projection: string;
   selected: boolean;
+  featureOf: string;
+  featureOfLabel: string;
+  featureOfbfsNum: number;
 }

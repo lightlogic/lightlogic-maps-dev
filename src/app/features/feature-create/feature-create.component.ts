@@ -10,7 +10,6 @@ import { FeaturesService } from '../features.service';
 })
 export class FeatureCreateComponent implements OnInit {
   communeForm: FormGroup;
-  featureForm: FormGroup;
   isCommuneLoading = false;
   private featureId: string;
 
@@ -22,25 +21,6 @@ export class FeatureCreateComponent implements OnInit {
     this.communeForm = new FormGroup({
       communeName: new FormControl(null),
     });
-    // Feature Form
-    this.featureForm = new FormGroup({
-      uri: new FormControl(null),
-      description: new FormControl(null),
-      wktGeometry: new FormControl(null),
-      projection: new FormControl('EPSG:3857'),
-    });
-  }
-
-  onAddFeature() {
-    this.featuresService.addCustomFeature(
-      this.featureId,
-      this.featureForm.value.uri,
-      this.featureForm.value.description,
-      this.featureForm.value.wktGeometry,
-      this.featureForm.value.projection,
-      false // default value for "selected"
-    );
-    this.featureForm.reset;
   }
 
   onAddCommune() {

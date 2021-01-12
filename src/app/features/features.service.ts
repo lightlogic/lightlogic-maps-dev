@@ -23,12 +23,13 @@ export class FeaturesService {
         map((featureData) => {
           return featureData.features.map((feature) => {
             return {
-              uri: feature.uri,
-              description: feature.description,
-              wktGeometry: feature.wktGeometry,
-              projection: feature.projection,
-              selected: feature.selected,
               id: feature._id,
+              featureOf: feature.featureOf,
+              projection: feature.projection,
+              geoJSONraw: feature.geoJSONraw,
+              selected: feature.selected,
+              featureOfLabel: feature.featureOfLabel,
+              featureOfbfsNum: feature.featureOfbfsNum,
             };
           });
         })
@@ -41,48 +42,24 @@ export class FeaturesService {
   }
 
   addSwisstopoFeature(communeName: string) {
-    this.http
-      .get<{ resError: string; resFeature: Feature }>(
-        'http://localhost:3000/api/features/' + encodeURI(communeName)
-      )
-      .subscribe((responseJson) => {
-        if (responseJson.resError) {
-          console.log(responseJson.resError);
-        } else {
-          this.features.push(responseJson.resFeature);
-          this.featuresUpdated.next([...this.features]);
-          this.router.navigate(['/display']);
-        }
-      });
-  }
-
-  addCustomFeature(
-    id: string,
-    uri: string,
-    description: string,
-    wktGeometry: string,
-    projection: string,
-    selected: boolean
-  ) {
-    const feature: Feature = {
-      id: null,
-      uri: uri,
-      description: description,
-      wktGeometry: wktGeometry,
-      projection: projection,
-      selected: false,
+    const newCommune = {
+      commName: communeName,
     };
     this.http
-      .post<{ message: string; featureId: string }>(
-        'http://localhost:3000/api/features',
-        feature
+      .post<{ message: string; feature: Feature }>(
+        'http://localhost:3000/api/features/swisstopo',
+        newCommune
       )
-      .subscribe((responseData) => {
-        const id = responseData.featureId;
-        feature.id = id;
-        this.features.push(feature);
-        this.featuresUpdated.next([...this.features]);
-        this.router.navigate(['/display']);
+      .subscribe((responseJson) => {
+        if (responseJson.feature) {
+          console.log(responseJson.feature);
+          this.features.push(responseJson.feature);
+          this.featuresUpdated.next([...this.features]);
+          this.router.navigate(['/display']);
+        } else {
+          console.log(responseJson.message);
+          this.router.navigate(['/display']);
+        }
       });
   }
 
@@ -107,15 +84,15 @@ export class FeaturesService {
 
   toggleFeatureSelection(featureId: string, selectionToSet: boolean) {
     const selectedValue = {
-      selected: selectionToSet
-    }
+      selected: selectionToSet,
+    };
     this.http
       .patch(
         'http://localhost:3000/api/features/select/' + featureId,
         selectedValue
       )
       .subscribe(() => {
-        this.features.find(x => x.id === featureId).selected = selectionToSet;
+        this.features.find((x) => x.id === featureId).selected = selectionToSet;
         this.featuresUpdated.next([...this.features]);
       });
   }

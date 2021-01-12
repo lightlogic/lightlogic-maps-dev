@@ -7,12 +7,11 @@ import { Vector as LayerVector, Tile } from 'ol/layer';
 import { Vector as SourceVector, OSM } from 'ol/source';
 import { WMTS as WMTSSource } from 'ol/source';
 import WMTStileGrid from 'ol/tilegrid/WMTS';
-import { WKT } from 'ol/format';
+import { GeoJSON } from 'ol/format';
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
 
 import { Feature } from '../features/feature.model';
-import Control from 'ol/control/Control';
 
 @Injectable({ providedIn: 'root' })
 export class MapsService {
@@ -116,30 +115,32 @@ export class MapsService {
       '+proj=somerc +lat_0=46.95240555555556 +lon_0=7.439583333333333 +k_0=1 +x_0=2600000 +y_0=1200000 +ellps=bessel +towgs84=674.374,15.056,405.346,0,0,0,0 +units=m +no_defs'
     );
     register(proj4);
-    let communesLimitsWKT = [];
 
+    // From https://stackoverflow.com/questions/49925035/openlayers-4-vector-append-new-features-but-without-clearing-others
+    // You almost got it. vectorSource.addFeature(feature); is the correct method. However, it only accepts ol.Feature objects, not raw data. The format option of the VectorSource only applies to loading via url, it is not used for addFeatures.
+    // But transforming the data to features is easy:
+    // var feature = new ol.format.GeoJSON()({ featureProjection: 'EPSG:3857' }).readFeature(data));
+    // vectorSource.addFeatures(feature);
+    //  or for multiple features
+    // var features = new ol.format.GeoJSON()({ featureProjection: 'EPSG:3857' }).readFeatures(data));
+    // vectorSource.addFeaturess(features);
+
+    // bad and dirty way to concat features selected geoJSON into one "collection"
+
+    var featuresGeoJSON = '{"type": "FeatureCollection", "features": [';
     featuresSelected.forEach((feature) => {
-      communesLimitsWKT.push({
-        wktGeom: feature.wktGeometry,
-        featureProj: feature.projection,
-      });
+      featuresGeoJSON =
+        featuresGeoJSON + JSON.stringify(feature.geoJSONraw) + ',';
     });
+    featuresGeoJSON = featuresGeoJSON.slice(0, -1);
+    featuresGeoJSON = featuresGeoJSON.concat(']}');
 
-    let format = new WKT();
-    let communesFeatures = [];
-    communesLimitsWKT.forEach((feature) => {
-      communesFeatures.push(
-        format.readFeature(feature.wktGeom, {
-          dataProjection: 'EPSG:4326', // projection of WKT data
-          featureProjection: 'EPSG:2058', // projection of Map and View
-        })
-      );
+    var myVsource = new SourceVector({
+      features: new GeoJSON().readFeatures(featuresGeoJSON),
     });
 
     const communesVector = new LayerVector({
-      source: new SourceVector({
-        features: communesFeatures,
-      }),
+      source: myVsource,
       visible: true,
       zIndex: 1,
     });
