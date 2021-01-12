@@ -71,7 +71,7 @@ export class FeaturesService {
   ) {
     const feature: Feature = {
       id: null,
-      geoJSONraw: geoJSONraw,
+      geoJSONraw: JSON.parse(geoJSONraw),
       projection: projection,
       selected: false,
       featureOf: 'null',

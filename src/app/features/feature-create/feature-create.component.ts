@@ -25,7 +25,7 @@ export class FeatureCreateComponent implements OnInit {
     // Feature Form
     this.featureForm = new FormGroup({
       geoJSONraw: new FormControl(null),
-      projection: new FormControl('EPSG:2058'),
+      projection: new FormControl('EPSG:2056'),
     });
   }
 

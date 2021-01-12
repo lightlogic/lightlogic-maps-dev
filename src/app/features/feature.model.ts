@@ -1,6 +1,6 @@
 export interface Feature {
   id: string;
-  geoJSONraw: string;
+  geoJSONraw: object;
   projection: string;
   selected: boolean;
   featureOf: string;
