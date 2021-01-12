@@ -63,35 +63,6 @@ export class FeaturesService {
       });
   }
 
-  addCustomFeature(
-    id: string,
-    geoJSONraw: string,
-    projection: string,
-    selected: boolean
-  ) {
-    const feature: Feature = {
-      id: null,
-      geoJSONraw: JSON.parse(geoJSONraw),
-      projection: projection,
-      selected: false,
-      featureOf: 'null',
-      featureOfLabel: 'null',
-      featureOfbfsNum: 0,
-    };
-    this.http
-      .post<{ message: string; featureId: string }>(
-        'http://localhost:3000/api/features/custom',
-        feature
-      )
-      .subscribe((responseData) => {
-        const id = responseData.featureId;
-        feature.id = id;
-        this.features.push(feature);
-        this.featuresUpdated.next([...this.features]);
-        this.router.navigate(['/display']);
-      });
-  }
-
   getFeatureUpdateListener() {
     return this.featuresUpdated.asObservable();
   }
