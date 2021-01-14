@@ -30,6 +30,10 @@ export class FeaturesService {
               selected: feature.selected,
               featureOfLabel: feature.featureOfLabel,
               featureOfbfsNum: feature.featureOfbfsNum,
+              featureId: feature.featureId,
+              layerBodId: feature.layerBodId,
+              layerName: feature.layerName,
+              bbox: feature.bbox,
             };
           });
         })

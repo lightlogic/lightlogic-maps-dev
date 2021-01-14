@@ -101,7 +101,7 @@ export class MapsService {
         requestEncoding: 'REST',
         style: 'default',
         matrixSet: layerConfig.matrixSet,
-        //TODO attribution not working. See Udemy approach
+        //TODO attribution not working. ? See Udemy approach
         attributions: attrString,
       }),
     });
@@ -126,6 +126,7 @@ export class MapsService {
     // vectorSource.addFeaturess(features);
 
     // bad and dirty way to concat features selected geoJSON into one "collection"
+    //TODO change to add features objects to vector source
 
     var featuresGeoJSON = '{"type": "FeatureCollection", "features": [';
     featuresSelected.forEach((feature) => {

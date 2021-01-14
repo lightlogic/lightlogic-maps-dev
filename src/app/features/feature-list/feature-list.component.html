@@ -10,11 +10,13 @@
       </span>
       <span class="spacer"></span>
       <ul>
-        <li>{{ feature.featureOfbfsNum }}&nbsp;</li>
+        <li>N°BFS: {{ feature.featureOfbfsNum }}&nbsp;</li>
       </ul>
     </mat-expansion-panel-header>
-    <p>Projection: {{ feature.projection}}</p>
-    <!-- <p>{{ feature.wktGeometry }}</p> -->
+    <p>Projection: {{ feature.projection }}</p>
+    <p>Couche Swisstopo ID: {{ feature.layerBodId }}</p>
+    <p>Couche Swisstopo intitulé: {{ feature.layerName }}</p>
+    <p>Bounding box: {{ feature.bbox }}</p>
     <mat-action-row>
 
       <button *ngIf="feature.selected; else elseButtonBlock" mat-button color="primary"

@@ -15,6 +15,8 @@ router.use(bodyparser.json());
 // method POST
 // path: /api/features/swisstopo
 router.post("/swisstopo", (req, res, next) => {
+  const layerBodID_communes = "ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill";
+  const layerName_communes = "Gemeindegrenzen";
   AdminUnit.findOne({ name: req.body.commName }, (error, auData) => {
     if (auData == undefined) {
       // commune not in MongoDB therefor the limits of it geoJSON Feature will not as well
@@ -40,6 +42,10 @@ router.post("/swisstopo", (req, res, next) => {
                       featureOf: createAdminUnit._id,
                       featureOfLabel: createAdminUnit.name,
                       featureOfbfsNum: createAdminUnit.bfsNum,
+                      layerBodId: geoJsonData.layerBodId,
+                      layerName: layerName_communes,
+                      featureId: createAdminUnit.bfsNum,
+                      bbox: geoJsonData.bbox
                     });
                     // saving commune limits to the DB ("feature" Mongoose model)
                     communeFeature.save().then((createdFeature) => {

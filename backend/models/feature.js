@@ -10,7 +10,11 @@ const featureSchema = mongoose.Schema({
     required: true,
   },
   featureOfLabel: { type: String },
-  featureOfbfsNum: { type: Number }
+  featureOfbfsNum: { type: Number },
+  layerBodId: { type: String },
+  layerName: { type: String },
+  featureId: { type: String },
+  bbox: [{ type: Number }]
 });
 
 module.exports = mongoose.model("Feature", featureSchema);

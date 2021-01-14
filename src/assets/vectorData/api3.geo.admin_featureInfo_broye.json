@@ -1,0 +1,69 @@
+{
+  "feature": {
+    "layerName": "R\u00e9seau hydrographique VECTOR25",
+    "featureId": 202816,
+    "geometry": {
+      "paths": [
+        [
+          [
+            568224.6,
+            195281.3
+          ],
+          [
+            568249.4,
+            195337.3
+          ],
+          [
+            568283.1,
+            195416.8
+          ],
+          [
+            568304.0,
+            195467.0
+          ],
+          [
+            568345.3,
+            195559.0
+          ],
+          [
+            568440.0,
+            195773.3
+          ],
+          [
+            568494.7,
+            195899.8
+          ],
+          [
+            568499.9,
+            195911.2
+          ],
+          [
+            568539.8,
+            195998.8
+          ]
+        ]
+      ],
+      "spatialReference": {
+        "wkid": 21781
+      }
+    },
+    "bbox": [
+      568224.6,
+      195281.3,
+      568539.8,
+      195998.8
+    ],
+    "attributes": {
+      "objectval_fr": "Axe de la rivi\u00e8re",
+      "name": "Broye",
+      "objectid": 1589550,
+      "gwlnr": "CH0002150000",
+      "objectval_de": "Fluss, bzw. dessen Mittelachse",
+      "gewissnr": 215,
+      "label": 202816,
+      "objectval": "Fluss"
+    },
+    "layerBodId": "ch.swisstopo.vec25-gewaessernetz_referenz",
+    "id": 202816
+  }
+}

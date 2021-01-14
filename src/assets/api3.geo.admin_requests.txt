@@ -3,3 +3,12 @@ https://api3.geo.admin.ch/rest/services/api/SearchServer?searchText=Mont-Vully&t
 
 Geometry Request
 http://api3.geo.admin.ch/rest/services/api/MapServer/ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill/2284?geometryFormat=geojson&sr=2056
+
+Features request on ch.swisstopo.vec25-gewaessernetz_referenz for Broye Gewaessernumer
+http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.swisstopo.vec25-gewaessernetz_referenz&type=featuresearch&searchText=CH0002150000
+
+Features request on ch.bafu.vec25-gewaessernetz_2000 (Réseau hydrographique 1:2 Mio.)
+http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.bafu.vec25-gewaessernetz_2000&type=featuresearch&searchText=CH0002150000
+
+Features request on ch.swisstopo.vec25-gewaessernetz_referenz
+http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.swisstopo.vec25-gewaessernetz_referenz&type=featuresearch&searchText=CH0002150000

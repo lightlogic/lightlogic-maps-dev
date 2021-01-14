@@ -6,4 +6,8 @@ export interface Feature {
   featureOf: string;
   featureOfLabel: string;
   featureOfbfsNum: number;
+  featureId: string,
+  layerBodId: string,
+  layerName: string,
+  bbox: [number]
 }
