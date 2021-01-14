@@ -31,4 +31,28 @@ module.exports = {
         }
       });
   },
+  getRiverGeoJSON: function (gewaessNum, callback) {
+    API_URL = "https://api3.geo.admin.ch/rest/services/api/MapServer/find";
+    LAYER_ID = "ch.bafu.vec25-gewaessernetz_2000";
+    SEARCH_FIELD = "gewissnr";
+
+    request
+      .get(
+        API_URL +
+        "?layer=" +
+        LAYER_ID +
+        "&searchText=" +
+        gewaessNum +
+        "&searchField="+
+        SEARCH_FIELD +
+        "&returnGeometry=true"
+      )
+      .end((err, res) => {
+        if (err) {
+          callback(err);
+        } else {
+          callback(undefined, res.body.feature);
+        }
+      });
+  },
 };

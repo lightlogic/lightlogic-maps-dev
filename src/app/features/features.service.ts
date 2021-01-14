@@ -45,13 +45,13 @@ export class FeaturesService {
       });
   }
 
-  addSwisstopoFeature(communeName: string) {
+  addSwisstopoCommune(communeName: string) {
     const newCommune = {
       commName: communeName,
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo',
+        'http://localhost:3000/api/features/swisstopo/adminunit',
         newCommune
       )
       .subscribe((responseJson) => {
@@ -63,6 +63,28 @@ export class FeaturesService {
         } else {
           console.log(responseJson.message);
           this.router.navigate(['/display']);
+        }
+      });
+  }
+
+  addSwisstopoRiver(riverName: string) {
+    const newRiver = {
+      rivName: riverName,
+    };
+    this.http
+      .post<{ message: string; feature: Feature }>(
+        'http://localhost:3000/api/features/swisstopo/river',
+        newRiver
+      )
+      .subscribe((responseJson) => {
+        if (responseJson.feature) {
+          console.log(responseJson.feature);
+          //   this.features.push(responseJson.feature);
+          //   this.featuresUpdated.next([...this.features]);
+          //   this.router.navigate(['/display']);
+          // } else {
+          //   console.log(responseJson.message);
+          //   this.router.navigate(['/display']);
         }
       });
   }

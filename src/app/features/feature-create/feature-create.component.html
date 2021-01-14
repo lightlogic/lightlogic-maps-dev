@@ -1,5 +1,5 @@
-<mat-spinner *ngIf="isCommuneLoading"></mat-spinner>
-<mat-card *ngIf="!isCommuneLoading">
+<mat-spinner *ngIf="idDataLoading"></mat-spinner>
+<mat-card *ngIf="!idDataLoading">
   <mat-card-header>
     <mat-card-title>
       Commune
@@ -11,6 +11,23 @@
       <mat-form-field apparence="fill">
         <mat-label>Type a commune name</mat-label>
         <input matInput type="text" id="communeName" formControlName="communeName" class="form-contol" />
+      </mat-form-field>
+      <button mat-raised-button color="accent" type="submit">Add</button>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card *ngIf="!idDataLoading">
+  <mat-card-header>
+    <mat-card-title>
+      River
+    </mat-card-title>
+    <mat-card-subtitle>Adding a new river</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="riverForm" (ngSubmit)="onAddRiver()">
+      <mat-form-field apparence="fill">
+        <mat-label>Type a river name</mat-label>
+        <input matInput type="text" id="riverName" formControlName="riverName" class="form-contol" />
       </mat-form-field>
       <button mat-raised-button color="accent" type="submit">Add</button>
     </form>
