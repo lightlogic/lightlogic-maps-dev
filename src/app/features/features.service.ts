@@ -78,13 +78,13 @@ export class FeaturesService {
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
-          console.log(responseJson.feature);
+          console.log(responseJson.message);
           //   this.features.push(responseJson.feature);
           //   this.featuresUpdated.next([...this.features]);
-          //   this.router.navigate(['/display']);
-          // } else {
-          //   console.log(responseJson.message);
-          //   this.router.navigate(['/display']);
+          this.router.navigate(['/display']);
+        } else {
+          console.log(responseJson.message);
+          this.router.navigate(['/display']);
         }
       });
   }

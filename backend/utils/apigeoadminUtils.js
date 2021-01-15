@@ -17,11 +17,11 @@ module.exports = {
     request
       .get(
         API_URL +
-        LAYER_ID +
-        "/" +
-        communeBFSnum +
-        "?geometryFormat=geojson&sr=" +
-        PROJECTION
+          LAYER_ID +
+          "/" +
+          communeBFSnum +
+          "?geometryFormat=geojson&sr=" +
+          PROJECTION
       )
       .end((err, res) => {
         if (err) {
@@ -31,28 +31,24 @@ module.exports = {
         }
       });
   },
-  getRiverGeoJSON: function (gewaessNum, callback) {
+  getRiverGeoJSON: function (gewaessNum, layerBodId, callback) {
     API_URL = "https://api3.geo.admin.ch/rest/services/api/MapServer/find";
-    LAYER_ID = "ch.bafu.vec25-gewaessernetz_2000";
     SEARCH_FIELD = "gewissnr";
-
-    request
-      .get(
-        API_URL +
-        "?layer=" +
-        LAYER_ID +
-        "&searchText=" +
-        gewaessNum +
-        "&searchField="+
-        SEARCH_FIELD +
-        "&returnGeometry=true"
-      )
-      .end((err, res) => {
-        if (err) {
-          callback(err);
-        } else {
-          callback(undefined, res.body.feature);
-        }
-      });
+    reqURL =
+      API_URL +
+      "?layer=" +
+      layerBodId +
+      "&searchText=" +
+      gewaessNum +
+      "&searchField=" +
+      SEARCH_FIELD +
+      "&returnGeometry=true&geometryFormat=geojson&sr=2056&lang=fr";
+    request.get(reqURL).end((err, res) => {
+      if (err) {
+        callback(err);
+      } else {
+        callback(undefined, res.body);
+      }
+    });
   },
 };
