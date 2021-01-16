@@ -3,7 +3,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const colors = require("colors");
 
-const featuresRoutes = require('./routes/features');
+const geoEntityRoutes = require('./routes/geoentity');
+const geoEntitiesRoutes = require('./routes/geoentities');
 
 const app = express();
 
@@ -37,12 +38,11 @@ app.use((req, res, next) => {
   next();
 });
 
-// from ./routes/features.js (see import on top)
-// in app.use, the "/api/features" serves as a filter.
-// only the routes starting with /api/features will be
-// forwared in ./routes/features.js
-app.use("/api/features", featuresRoutes);
-
-
+// from ./routes/geoentities.js (see import on top)
+// in app.use, the "/api/geoentities" serves as a filter.
+// only the routes starting with /api/geoentitites will be
+// forwared in ./routes/geoentities.js
+app.use("/api/geoentity", geoEntityRoutes);
+app.use("/api/geoentities", geoEntitiesRoutes);
 
 module.exports = app;

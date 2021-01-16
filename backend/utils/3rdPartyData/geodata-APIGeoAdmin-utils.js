@@ -7,6 +7,7 @@ const colors = require("colors");
 // this service can be used to retrieve a feature resource.
 module.exports = {
   getCommuneGeoJSON: function (communeBFSnum, callback) {
+    //TODO move constant to env file
     API_URL = "https://api3.geo.admin.ch/rest/services/api/MapServer/";
     LAYER_ID = "ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill";
     PROJECTION = "2056";
@@ -28,6 +29,7 @@ module.exports = {
     });
   },
   getRiverGeoJSON: function (gewaessNum, layerBodId, callback) {
+    //TODO move constant to env file
     API_URL = "https://api3.geo.admin.ch/rest/services/api/MapServer/find";
     SEARCH_FIELD = "gewissnr";
     reqURL =

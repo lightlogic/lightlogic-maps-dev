@@ -6,6 +6,7 @@ const GeoEntity = require("../../models/geoEntity");
 // Module fetching data from https://query.wikidata.org/
 module.exports = {
   getWikidataRiver: function (riverName, callback) {
+    //TODO move constant to env file
     WIKIDATA_SPARQL_EP = "https://query.wikidata.org/sparql";
     SPARQLQUERY_TEMPLATE =
       "query=SELECT%20%3Furi%20%3FgewissNum%20WHERE%7B%3Furi%20wdt%3AP31%20wd%3AQ4022%3Bwdt%3AP17%20wd%3AQ39%3B%3Flabel%22RIVERPLACEHOLDER%22%40fr.%3Furi%20wdt%3AP1183%20%3FgewissNum.%7D%0A";
