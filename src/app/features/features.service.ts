@@ -4,7 +4,13 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+
 import { Feature } from './feature.model';
+
+import { environment } from '../../environments/environment';
+const BACKEND_URL = environment.apiURL;
+const RIVER_ISA_URI = environment.featureRiver_isA_URI;
+const ADMINUNIT_ISA_URI = environment.featureAdminUnit_isA_URI;
 
 @Injectable({ providedIn: 'root' })
 export class FeaturesService {
@@ -17,16 +23,16 @@ export class FeaturesService {
   getFeatures() {
     this.http
       .get<{ message: string; features: any }>(
-        'http://localhost:3000/api/geoentities'
+        BACKEND_URL + '/geoentities'
       )
       .pipe(
         map((featureData) => {
           return featureData.features.map((feature) => {
             var featureType: string = '';
-            if (feature.isA == 'https://www.wikidata.org/wiki/Q4022') {
+            if (feature.isA == RIVER_ISA_URI) {
               featureType = 'Rivière';
             } else if (
-              (feature.isA = 'http://www.geonames.org/ontology#A.ADM3')
+              (feature.isA = ADMINUNIT_ISA_URI)
             ) {
               featureType = 'Commune';
             }
@@ -60,7 +66,7 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/geoentity/swisstopo/adminunit',
+        BACKEND_URL + '/geoentity/swisstopo/adminunit',
         newCommune
       )
       .subscribe((responseJson) => {
@@ -81,7 +87,7 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/geoentity/swisstopo/river',
+        BACKEND_URL + '/geoentity/swisstopo/river',
         newRiver
       )
       .subscribe((responseJson) => {
@@ -101,7 +107,7 @@ export class FeaturesService {
 
   deleteFeature(featureId: string) {
     this.http
-      .delete('http://localhost:3000/api/geoentity/' + featureId)
+      .delete(BACKEND_URL + '/geoentity/' + featureId)
       .subscribe(() => {
         // to keep in the local array of features the posts that does not have featureId
         // and delete the one that has the featureId
@@ -120,7 +126,7 @@ export class FeaturesService {
     };
     this.http
       .patch(
-        'http://localhost:3000/api/geoentity/select/' + featureId,
+        BACKEND_URL + '/geoentity/select/' + featureId,
         selectedValue
       )
       .subscribe(() => {
