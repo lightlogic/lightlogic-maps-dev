@@ -122,7 +122,7 @@ router.post("/swisstopo/river", (req, res, next) => {
 // full objects with metadata AND geometry (geoJSON)
 router.get("", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
@@ -135,7 +135,7 @@ router.get("", (req, res, next) => {
 // only retrieve metadata (no geometry)
 router.get("/metadata", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
@@ -148,7 +148,7 @@ router.get("/metadata", (req, res, next) => {
 // only retrieve geometry (geoJSON)
 router.get("/geojson", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
@@ -160,7 +160,7 @@ router.get("/geojson", (req, res, next) => {
 // path: /api/geoentity/select/fi111jej3iojofidj
 router.patch("/select/:id", (req, res, next) => {
   //TODO fix code to update geoEntity
-  Feature.updateOne(
+  GeoEntity.updateOne(
     { _id: req.params.id },
     { selected: req.body.selected }
   ).then((result) => {
@@ -173,7 +173,7 @@ router.patch("/select/:id", (req, res, next) => {
 // path: /api/geoentity/fi111jej3iojofidj
 router.delete("/:id", (req, res, next) => {
   //TODO fix code to delete geoEntity
-  Feature.deleteOne({ _id: req.params.id }).then((result) => {
+  GeoEntity.deleteOne({ _id: req.params.id }).then((result) => {
     res.status(200).json({ message: "Feature deleted" });
   });
 });

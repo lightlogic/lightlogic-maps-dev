@@ -17,23 +17,31 @@ export class FeaturesService {
   getFeatures() {
     this.http
       .get<{ message: string; features: any }>(
-        'http://localhost:3000/api/features'
+        'http://localhost:3000/api/geoentities'
       )
       .pipe(
         map((featureData) => {
           return featureData.features.map((feature) => {
+            var featureType: string = '';
+            if (feature.isA == 'https://www.wikidata.org/wiki/Q4022') {
+              featureType = 'Rivière';
+            } else if (
+              (feature.isA = 'http://www.geonames.org/ontology#A.ADM3')
+            ) {
+              featureType = 'Commune';
+            }
             return {
               id: feature._id,
-              featureOf: feature.featureOf,
-              projection: feature.projection,
-              geoJSONraw: feature.geoJSONraw,
+              uri: feature.uri,
+              featureId: feature.domainId,
+              featureIdLabel: feature.domainIdLabel,
+              featureType: featureType,
+              featureName: feature.description,
+              geoJSON: feature.geoJSON,
               selected: feature.selected,
-              featureOfLabel: feature.featureOfLabel,
-              featureOfbfsNum: feature.featureOfbfsNum,
-              featureId: feature.featureId,
-              layerBodId: feature.layerBodId,
-              layerName: feature.layerName,
+              parentFeature: feature.parentLabel,
               bbox: feature.bbox,
+              projection: 'EPSG:2056',
             };
           });
         })
@@ -42,6 +50,7 @@ export class FeaturesService {
       .subscribe((transformedFeatures) => {
         this.features = transformedFeatures;
         this.featuresUpdated.next([...this.features]);
+        console.log(this.features);
       });
   }
 
@@ -51,12 +60,11 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo/adminunit',
+        'http://localhost:3000/api/geoentity/swisstopo/adminunit',
         newCommune
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
-          console.log(responseJson.feature);
           this.features.push(responseJson.feature);
           this.featuresUpdated.next([...this.features]);
           this.router.navigate(['/display']);
@@ -73,17 +81,15 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo/river',
+        'http://localhost:3000/api/geoentity/swisstopo/river',
         newRiver
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
-          console.log(responseJson.message);
-          //   this.features.push(responseJson.feature);
-          //   this.featuresUpdated.next([...this.features]);
+          this.features.push(responseJson.feature);
+          this.featuresUpdated.next([...this.features]);
           this.router.navigate(['/display']);
         } else {
-          console.log(responseJson.message);
           this.router.navigate(['/display']);
         }
       });
@@ -95,7 +101,7 @@ export class FeaturesService {
 
   deleteFeature(featureId: string) {
     this.http
-      .delete('http://localhost:3000/api/features/' + featureId)
+      .delete('http://localhost:3000/api/geoentity/' + featureId)
       .subscribe(() => {
         // to keep in the local array of features the posts that does not have featureId
         // and delete the one that has the featureId
@@ -114,7 +120,7 @@ export class FeaturesService {
     };
     this.http
       .patch(
-        'http://localhost:3000/api/features/select/' + featureId,
+        'http://localhost:3000/api/geoentity/select/' + featureId,
         selectedValue
       )
       .subscribe(() => {

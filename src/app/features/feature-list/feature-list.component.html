@@ -4,18 +4,18 @@
     <mat-expansion-panel-header>
       <span>
         <div *ngIf="feature.selected; else elseTitleBlock">
-          <b>{{ feature.featureOfLabel }}</b>
+          <b>{{ feature.featureName }}</b>
         </div>
-        <ng-template #elseTitleBlock>{{ feature.featureOfLabel }}</ng-template>
+        <ng-template #elseTitleBlock>{{ feature.featureName }}</ng-template>
       </span>
       <span class="spacer"></span>
       <ul>
-        <li>N°BFS: {{ feature.featureId }}&nbsp;</li>
+        <li>{{ feature.featureIdLabel }}: {{ feature.featureId }}&nbsp;</li>
       </ul>
     </mat-expansion-panel-header>
+    <p>Type: {{ feature.featureType }}</p>
     <p>Projection: {{ feature.projection }}</p>
-    <p>Couche Swisstopo ID: {{ feature.layerBodId }}</p>
-    <p>Couche Swisstopo intitulé: {{ feature.layerName }}</p>
+    <p>Parent: {{ feature.parentFeature }}</p>
     <p>Bounding box: {{ feature.bbox }}</p>
     <mat-action-row>
 

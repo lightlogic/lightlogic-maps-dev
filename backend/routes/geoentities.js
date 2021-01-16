@@ -5,8 +5,6 @@ const colors = require("colors");
 
 const GeoEntity = require("../models/geoEntity");
 
-const geoEntityUtils = require("../utils/geoEntity/geoEntityUtils");
-
 router.use(bodyparser.json());
 
 
@@ -15,7 +13,7 @@ router.use(bodyparser.json());
 // full objects with metadata AND geometry (geoJSON)
 router.get("", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
@@ -28,7 +26,7 @@ router.get("", (req, res, next) => {
 // only retrieve metadata (no geometry)
 router.get("/metadata", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
@@ -41,7 +39,7 @@ router.get("/metadata", (req, res, next) => {
 // only retrieve geometry (geoJSON)
 router.get("/geojson", (req, res, next) => {
   //TODO fix code to get geoEntity
-  Feature.find().then((documents) => {
+  GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
       features: documents,
