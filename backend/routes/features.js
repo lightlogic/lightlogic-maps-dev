@@ -1,15 +1,12 @@
 const express = require("express");
+const router = express.Router();
 const bodyparser = require("body-parser");
 const colors = require("colors");
 
+const GeoEntity = require("../models/geoEntity");
 const Feature = require("../models/feature");
-const ldgeoadminModule = require("../utils/ldgeoadminUtils");
-const apigeoadminModule = require("../utils/apigeoadminUtils");
-const AdminUnit = require("../models/adminUnit");
-const River = require("../models/river");
-const ldwikidataModule = require("../utils/ldwikidataUtils");
 
-const router = express.Router();
+const geoEntityUtils = require("../utils/geoEntity/geoEntityUtils");
 
 router.use(bodyparser.json());
 
@@ -17,94 +14,51 @@ router.use(bodyparser.json());
 // method POST
 // path: /api/features/swisstopo
 router.post("/swisstopo/adminunit", (req, res, next) => {
+  const geoEntityType_Commune = "commune";
+  const COMMUNE_TYPE_URI = "http://www.geonames.org/ontology#A.ADM3";
+  const COMMUNE_DOMAIN_LABEL = "bfsNum";
   const layerBodID_communes =
     "ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill";
   const layerName_communes = "Gemeindegrenzen";
-  AdminUnit.findOne({ name: req.body.commName }, (error, auData) => {
+  GeoEntity.findOne({ name: req.body.commName }, (error, auData) => {
     if (auData == undefined) {
-      // commune not in MongoDB therefor the limits of it geoJSON Feature will not as well
-      // == > get commune metadata from SPARQLendpoint ld.geo.admin.ch
-      ldgeoadminModule.getBFScommuneData(
+      // commune not yet cached
+      // == > get commune metadata from SPARQLendpoint ld.geo.admin.ch and api3.geo.admin for geoJSON
+      geoEntityUtils.createGeoEntity(
         req.body.commName,
-        (cerror, communeData) => {
+        geoEntityType_Commune,
+        COMMUNE_TYPE_URI,
+        COMMUNE_DOMAIN_LABEL,
+        (cerror, communeEntity) => {
           if (cerror) {
             console.log(colors.red(cerror));
           } else {
-            // saving commune metadata to the DB ("AdminUnit" Mongoose model)
-            communeData.save().then((createAdminUnit) => {
-              // retrieving the limit of the commune
-              // == > get commune limits geoJSON from api3.geo.admin.ch
-              apigeoadminModule.getCommuneGeoJSON(
-                createAdminUnit.bfsNum,
-                (gerror, geoJsonData) => {
-                  if (gerror) {
-                    console.log(colors.red(gerror));
-                  } else {
-                    communeFeature = new Feature({
-                      geoJSONraw: geoJsonData,
-                      featureOf: createAdminUnit._id,
-                      featureOfLabel: createAdminUnit.name,
-                      featureOfbfsNum: createAdminUnit.bfsNum,
-                      layerBodId: geoJsonData.layerBodId,
-                      layerName: layerName_communes,
-                      featureId: createAdminUnit.bfsNum,
-                      bbox: geoJsonData.bbox,
+            geoEntityUtils.fetchGeoJson(
+              communeEntity,
+              layerBodID_communes,
+              (gerror, geoJsonData) => {
+                if (gerror) {
+                  console.log(colors.red(gerror));
+                } else {
+                  communeEntity.geoJSON = geoJsonData.geoJSON;
+                  communeEntity.save().then((createdCommune) => {
+                    res.status(201).json({
+                      message: "Commune retrieved and cached.",
+                      feature: createdCommune,
                     });
-                    // saving commune limits to the DB ("feature" Mongoose model)
-                    communeFeature.save().then((createdFeature) => {
-                      res.status(201).json({
-                        message: "Commune and geoJSON retrieved and cached.",
-                        feature: createdFeature,
-                      });
-                    });
-                  }
+                  });
                 }
-              );
-            });
+              }
+            );
           }
         }
       );
       // auData is defined => the metadata of this commune is allready cached in MongoDB
     } else {
-      // search for matching commune limits in the feature collection of MongoDB
-      Feature.findOne({ featureOf: auData._id }, (ferror, fData) => {
-        if (ferror) {
-          console.log(colors.red(ferror));
-          // if no matching commune limits are found
-          // == > get commune limits geoJSON from api3.geo.admin.ch
-        } else if (fData == undefined) {
-          apigeoadminModule.getCommuneGeoJSON(
-            auData.bfsNum,
-            (gerror, geoJsonData) => {
-              if (gerror) {
-                console.log(colors.red(gerror));
-              } else {
-                communeFeature = new Feature({
-                  geoJSONraw: geoJsonData,
-                  featureOf: auData._id,
-                  featureOfLabel: auData.name,
-                  featureOfId: auData.bfsNum,
-                });
-                communeFeature.save().then((createdFeature) => {
-                  res.status(201).json({
-                    message:
-                      "Commune was allready cached but the geoJSON needed to be retrieved and cached.",
-                    feature: createdFeature,
-                  });
-                });
-              }
-            }
-          );
-          // both the commune and the commune's limits were allready cached in the DB.
-          // there is no reason to add this metadata or this feature. Neither to the MongoDB Cache and neither to the features array in the front end
-          // => no data is returned from the backend
-        } else {
-          res.status(200).json({
-            message:
-              "Feature allready existed. No further data needed to be retrieved.",
-            feature: null,
-          });
-        }
+      res.status(200).json({
+        message:
+          "Commune allready existed. No further data needed to be retrieved.",
+        feature: null,
       });
     }
   });
@@ -114,56 +68,40 @@ router.post("/swisstopo/adminunit", (req, res, next) => {
 // method POST
 // path: /api/features/swisstopo/river
 router.post("/swisstopo/river", (req, res, next) => {
+  const geoEntityType_river = "river";
+  RIVER_isA_URI = "https://www.wikidata.org/wiki/Q4022";
+  const domainIdLabel = "gewissNum";
   const layerBodId_rivers = "ch.bafu.vec25-gewaessernetz_2000";
-  const layerName_rivers = "Water network 1:2,000,000";
-  DEBUG_query_riverName = "Broye";
-  River.findOne({ name: req.body.rivName }, (error, riverData) => {
+  GeoEntity.findOne({ name: req.body.rivName }, (error, riverData) => {
     if (riverData == undefined) {
-      // river not in MongoDB therefor the limits of it geoJSON Feature will not as well
-      // == > query api3.geo.admin.ch for river metadata and geoJSON features
-      ldwikidataModule.getWikidataRiver(
+      // river not yet cached in DB
+      // == > query wikidata for river unique id ans api3.geo.admin.ch for geoJSON
+      geoEntityUtils.createGeoEntity(
         req.body.rivName,
-        (cerror, riverData) => {
+        geoEntityType_river,
+        RIVER_isA_URI,
+        domainIdLabel,
+        (cerror, riverEntity) => {
           if (cerror) {
             console.log(colors.red(cerror));
           } else {
-            // saving river metadata to the DB ("River" Mongoose model)
-            riverData.save().then((createRiver) => {
-              // retrieving the limit of the commune
-              // == > get commune limits geoJSON from api3.geo.admin.ch
-              apigeoadminModule.getRiverGeoJSON(
-                createRiver.gewissNum,
-                layerBodId_rivers,
-                (gerror, geoJsonData) => {
-                  if (gerror) {
-                    console.log(colors.red(gerror));
-                  } else {
-                    console.log(colors.zalgo(geoJsonData))
-                    geoJsonData.results.forEach(riverFeatureElement => {
-                     riverFeature = new Feature({
-                      geoJSONraw: riverFeatureElement,
-                      featureOf: createRiver._id,
-                      featureOfLabel: createRiver.name,
-                      featureOfId: createRiver.gewissNum,
-                      layerBodId: createRiver.layerBodId,
-                      layerName: createRiver.layerName,
-                      featureId: geoJsonData.featureId,
-                      bbox: geoJsonData.bbox,
-                    });
-                    //saving commune limits to the DB ("feature" Mongoose model)
-                    riverFeature.save()
-                    });
-
+            geoEntityUtils.fetchGeoJson(
+              riverEntity,
+              layerBodId_rivers,
+              (gerror, geoJsonData) => {
+                if (gerror) {
+                  console.log(colors.red(gerror));
+                } else {
+                  riverEntity.geoJSON = geoJsonData.geoJSON.results;
+                  riverEntity.save().then((createdRiver) => {
                     res.status(201).json({
-                      message: "Commune and geoJSON retrieved and cached.",
-                      // feature: createdFeature,
-                      feature: geoJsonData,
+                      message: "River retrieved and cached.",
+                      feature: createdRiver,
                     });
-                    // });
-                  }
+                  });
                 }
-              );
-            });
+              }
+            );
           }
         }
       );

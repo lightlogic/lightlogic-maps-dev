@@ -1,20 +1,27 @@
 const mongoose = require("mongoose");
 
 const featureSchema = mongoose.Schema({
-  geoJSONraw: { type: Object },
-  projection: { type: String, default: "EPSG:2056" },
-  selected: { type: Boolean, default: true },
   featureOf: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "AdminUnit",
+    ref: "GeoEntity",
     required: true,
   },
-  featureOfId: { type: Number },
-  featureId: { type: Number },
-  featureOfLabel: { type: String },
-  bbox: [{ type: Number }],
-  layerBodId: { type: String },
-  layerName: { type: String },
+  geoJSON: [
+    {
+      geometry: {
+        type: String,
+        coordinates: Array
+      },
+      layerBodId: String,
+      bbox: Array,
+      featureId: Number,
+      type: String,
+      featureId: Number,
+      properties: {
+        name: String,
+      },
+    },
+  ]
 });
 
 module.exports = mongoose.model("Feature", featureSchema);
