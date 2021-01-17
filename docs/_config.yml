@@ -1,3 +1,4 @@
 theme: jekyll-theme-leap-day
-title: [Lightlogic Maps]
-description: [Usage de données libres dans des cartes Swisstopo]
+title: Lightlogic Maps
+description: Usage de données libres dans des cartes Swisstopo
+show_downloads: false
