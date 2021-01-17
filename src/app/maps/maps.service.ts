@@ -131,7 +131,8 @@ export class MapsService {
     var featuresGeoJSON = '{"type": "FeatureCollection", "features": [';
     featuresSelected.forEach((feature) => {
       featuresGeoJSON =
-        featuresGeoJSON + JSON.stringify(feature.geoJSONraw) + ',';
+      //featuresGeoJSON + JSON.stringify(feature.geoJSONraw) + ',';
+      featuresGeoJSON + JSON.stringify(feature.geoJSON) + ',';
     });
     featuresGeoJSON = featuresGeoJSON.slice(0, -1);
     featuresGeoJSON = featuresGeoJSON.concat(']}');

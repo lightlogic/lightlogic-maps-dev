@@ -10,7 +10,8 @@ import { FeaturesService } from '../features.service';
 })
 export class FeatureCreateComponent implements OnInit {
   communeForm: FormGroup;
-  isCommuneLoading = false;
+  riverForm: FormGroup;
+  idDataLoading = false;
   private featureId: string;
 
   constructor(public featuresService: FeaturesService) {}
@@ -21,12 +22,20 @@ export class FeatureCreateComponent implements OnInit {
     this.communeForm = new FormGroup({
       communeName: new FormControl(null),
     });
+    this.riverForm = new FormGroup({
+      riverName: new FormControl(null),
+    });
   }
 
   onAddCommune() {
-    this.isCommuneLoading = true;
-    this.featuresService.addSwisstopoFeature(
+    this.idDataLoading = true;
+    this.featuresService.addSwisstopoCommune(
       this.communeForm.value.communeName
     );
+  }
+
+  onAddRiver() {
+    this.idDataLoading = true;
+    this.featuresService.addSwisstopoRiver(this.riverForm.value.riverName);
   }
 }

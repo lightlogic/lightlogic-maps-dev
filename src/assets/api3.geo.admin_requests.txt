@@ -10,5 +10,6 @@ http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.swisstopo.ve
 Features request on ch.bafu.vec25-gewaessernetz_2000 (Réseau hydrographique 1:2 Mio.)
 http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.bafu.vec25-gewaessernetz_2000&type=featuresearch&searchText=CH0002150000
 
-Features request on ch.swisstopo.vec25-gewaessernetz_referenz
-http://api3.geo.admin.ch/rest/services/api/SearchServer?features=ch.swisstopo.vec25-gewaessernetz_referenz&type=featuresearch&searchText=CH0002150000
+Features request on ch.swisstopo.vec25-gewaessernetz_2000
+for the Broye (gewissnr = 215; gwlnr = CH0002150000)
+https://api3.geo.admin.ch/rest/services/api/MapServer/find?layer=ch.bafu.vec25-gewaessernetz_2000&searchText=215&searchField=gewissnr&returnGeometry=true

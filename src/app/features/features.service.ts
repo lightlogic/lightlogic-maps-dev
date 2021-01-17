@@ -4,7 +4,13 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+
 import { Feature } from './feature.model';
+
+import { environment } from '../../environments/environment';
+const BACKEND_URL = environment.apiURL;
+const RIVER_ISA_URI = environment.featureRiver_isA_URI;
+const ADMINUNIT_ISA_URI = environment.featureAdminUnit_isA_URI;
 
 @Injectable({ providedIn: 'root' })
 export class FeaturesService {
@@ -17,23 +23,31 @@ export class FeaturesService {
   getFeatures() {
     this.http
       .get<{ message: string; features: any }>(
-        'http://localhost:3000/api/features'
+        BACKEND_URL + '/geoentities'
       )
       .pipe(
         map((featureData) => {
           return featureData.features.map((feature) => {
+            var featureType: string = '';
+            if (feature.isA == RIVER_ISA_URI) {
+              featureType = 'Rivière';
+            } else if (
+              (feature.isA = ADMINUNIT_ISA_URI)
+            ) {
+              featureType = 'Commune';
+            }
             return {
               id: feature._id,
-              featureOf: feature.featureOf,
-              projection: feature.projection,
-              geoJSONraw: feature.geoJSONraw,
+              uri: feature.uri,
+              featureId: feature.domainId,
+              featureIdLabel: feature.domainIdLabel,
+              featureType: featureType,
+              featureName: feature.description,
+              geoJSON: feature.geoJSON,
               selected: feature.selected,
-              featureOfLabel: feature.featureOfLabel,
-              featureOfbfsNum: feature.featureOfbfsNum,
-              featureId: feature.featureId,
-              layerBodId: feature.layerBodId,
-              layerName: feature.layerName,
+              parentFeature: feature.parentLabel,
               bbox: feature.bbox,
+              projection: 'EPSG:2056',
             };
           });
         })
@@ -42,26 +56,46 @@ export class FeaturesService {
       .subscribe((transformedFeatures) => {
         this.features = transformedFeatures;
         this.featuresUpdated.next([...this.features]);
+        console.log(this.features);
       });
   }
 
-  addSwisstopoFeature(communeName: string) {
+  addSwisstopoCommune(communeName: string) {
     const newCommune = {
       commName: communeName,
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        'http://localhost:3000/api/features/swisstopo',
+        BACKEND_URL + '/geoentity/swisstopo/adminunit',
         newCommune
       )
       .subscribe((responseJson) => {
         if (responseJson.feature) {
-          console.log(responseJson.feature);
           this.features.push(responseJson.feature);
           this.featuresUpdated.next([...this.features]);
           this.router.navigate(['/display']);
         } else {
           console.log(responseJson.message);
+          this.router.navigate(['/display']);
+        }
+      });
+  }
+
+  addSwisstopoRiver(riverName: string) {
+    const newRiver = {
+      rivName: riverName,
+    };
+    this.http
+      .post<{ message: string; feature: Feature }>(
+        BACKEND_URL + '/geoentity/swisstopo/river',
+        newRiver
+      )
+      .subscribe((responseJson) => {
+        if (responseJson.feature) {
+          this.features.push(responseJson.feature);
+          this.featuresUpdated.next([...this.features]);
+          this.router.navigate(['/display']);
+        } else {
           this.router.navigate(['/display']);
         }
       });
@@ -73,7 +107,7 @@ export class FeaturesService {
 
   deleteFeature(featureId: string) {
     this.http
-      .delete('http://localhost:3000/api/features/' + featureId)
+      .delete(BACKEND_URL + '/geoentity/' + featureId)
       .subscribe(() => {
         // to keep in the local array of features the posts that does not have featureId
         // and delete the one that has the featureId
@@ -92,7 +126,7 @@ export class FeaturesService {
     };
     this.http
       .patch(
-        'http://localhost:3000/api/features/select/' + featureId,
+        BACKEND_URL + '/geoentity/select/' + featureId,
         selectedValue
       )
       .subscribe(() => {

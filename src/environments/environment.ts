@@ -3,7 +3,10 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiURL: "http://localhost:3000/api",
+  featureRiver_isA_URI: "https://www.wikidata.org/wiki/Q4022",
+  featureAdminUnit_isA_URI: "http://www.geonames.org/ontology#A.ADM3"
 };
 
 /*
