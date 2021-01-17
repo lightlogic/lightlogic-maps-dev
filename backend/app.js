@@ -1,12 +1,15 @@
+const path = require("path");
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const colors = require("colors");
 
-const geoEntityRoutes = require('./routes/geoentity');
-const geoEntitiesRoutes = require('./routes/geoentities');
+const geoEntityRoutes = require("./routes/geoentity");
+const geoEntitiesRoutes = require("./routes/geoentities");
 
 const app = express();
+
+app.use("/", express.static(path.join(__dirname, "angular")));
 
 mongoose
   // Mongo connection string example
@@ -44,5 +47,7 @@ app.use((req, res, next) => {
 // forwared in ./routes/geoentities.js
 app.use("/api/geoentity", geoEntityRoutes);
 app.use("/api/geoentities", geoEntitiesRoutes);
-
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "angular", "index.html"));
+});
 module.exports = app;

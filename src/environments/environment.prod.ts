@@ -1,6 +1,6 @@
 export const environment = {
   production: true,
-  apiURL: "http://localhost:3000/api",
+  apiURL: "http://lightlogicmapsbackend-env.eba-amehu83d.eu-central-1.elasticbeanstalk.com/api",
   featureRiver_isA_URI: "https://www.wikidata.org/wiki/Q4022",
-  featureAdminUnit_isA_URI: "http://www.geonames.org/ontology#A.ADM3"
+  featureAdminUnit_isA_URI: "https://www.geonames.org/ontology#A.ADM3"
 };
