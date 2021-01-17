@@ -17,7 +17,7 @@ module.exports = {
   ) {
     newGeoEntity = new GeoEntity();
     newGeoEntity.isA = geIsA;
-    if (geoEntityType == "river") {
+    if (geoEntityType == process.env.RIVER_TYPE) {
       dataWikidataUtils.getWikidataRiver(
         geoEntityName,
         (cerror, entityData) => {
@@ -38,7 +38,7 @@ module.exports = {
           }
         }
       );
-    } else if (geoEntityType == "commune") {
+    } else if (geoEntityType == process.env.ADMINUNIT_TYPE) {
       geodataLDGeoAdminUtils.getBFScommuneData(
         geoEntityName,
         (cerror, entityData) => {
@@ -64,7 +64,7 @@ module.exports = {
   },
   fetchGeoJson: function (geoEntity, layerBodId, callback) {
     // geoEntity is a river
-    if (geoEntity.isA == "https://www.wikidata.org/wiki/Q4022") {
+    if (geoEntity.isA == process.env.RIVER_ISA_URI) {
       geodataAPIGeoAdminUtils.getRiverGeoJSON(
         geoEntity.domainId,
         layerBodId,
@@ -79,7 +79,7 @@ module.exports = {
         }
       );
       // geoEntity is a commune
-    } else if (geoEntity.isA == "http://www.geonames.org/ontology#A.ADM3") {
+    } else if (geoEntity.isA == process.env.ADMINUNIT_ISA_URI) {
       geodataAPIGeoAdminUtils.getCommuneGeoJSON(
         geoEntity.domainId,
         (cerror, entityGeoJSON) => {

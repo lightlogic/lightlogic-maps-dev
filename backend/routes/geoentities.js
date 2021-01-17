@@ -12,7 +12,6 @@ router.use(bodyparser.json());
 // path: /api/geoentities
 // full objects with metadata AND geometry (geoJSON)
 router.get("", (req, res, next) => {
-  //TODO fix code to get geoEntity
   GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
@@ -25,7 +24,7 @@ router.get("", (req, res, next) => {
 // path: /api/geoentities/metadata
 // only retrieve metadata (no geometry)
 router.get("/metadata", (req, res, next) => {
-  //TODO fix code to get geoEntity
+  //TODO fix code to get metadata ONLY
   GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",
@@ -38,7 +37,7 @@ router.get("/metadata", (req, res, next) => {
 // path: /api/geoentities/geojson
 // only retrieve geometry (geoJSON)
 router.get("/geojson", (req, res, next) => {
-  //TODO fix code to get geoEntity
+  //TODO fix code to get geometry only
   GeoEntity.find().then((documents) => {
     res.status(200).json({
       message: "Features fetched successfully !",

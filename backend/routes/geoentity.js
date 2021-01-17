@@ -13,13 +13,12 @@ router.use(bodyparser.json());
 // method POST
 // path: /api/geoentity/swisstopo
 router.post("/swisstopo/adminunit", (req, res, next) => {
-  //TODO move constant to env file
-  const geoEntityType_Commune = "commune";
-  const COMMUNE_TYPE_URI = "http://www.geonames.org/ontology#A.ADM3";
+  const COMMUNE_TYPE_URI = process.env.ADMINUNIT_ISA_URI;
+  const geoEntityType_Commune = process.env.ADMINUNIT_TYPE;
   const COMMUNE_DOMAIN_LABEL = "bfsNum";
   const layerBodID_communes =
     "ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill";
-  const layerName_communes = "Gemeindegrenzen";
+
   GeoEntity.findOne({ name: req.body.commName }, (error, auData) => {
     if (auData == undefined) {
       // commune not yet cached
@@ -68,9 +67,8 @@ router.post("/swisstopo/adminunit", (req, res, next) => {
 // method POST
 // path: /api/geoentity/swisstopo/river
 router.post("/swisstopo/river", (req, res, next) => {
-  //TODO move constant to env file
-  const geoEntityType_river = "river";
-  RIVER_isA_URI = "https://www.wikidata.org/wiki/Q4022";
+  RIVER_isA_URI = process.env.RIVER_ISA_URI;
+  const geoEntityType_river = process.env.RIVER_TYPE;
   const domainIdLabel = "gewissNum";
   const layerBodId_rivers = "ch.bafu.vec25-gewaessernetz_2000";
   GeoEntity.findOne({ name: req.body.rivName }, (error, riverData) => {
@@ -159,7 +157,6 @@ router.get("/geojson", (req, res, next) => {
 // methode PATCH
 // path: /api/geoentity/select/fi111jej3iojofidj
 router.patch("/select/:id", (req, res, next) => {
-  //TODO fix code to update geoEntity
   GeoEntity.updateOne(
     { _id: req.params.id },
     { selected: req.body.selected }
@@ -168,11 +165,9 @@ router.patch("/select/:id", (req, res, next) => {
   });
 });
 
-
 // methode DELETE
 // path: /api/geoentity/fi111jej3iojofidj
 router.delete("/:id", (req, res, next) => {
-  //TODO fix code to delete geoEntity
   GeoEntity.deleteOne({ _id: req.params.id }).then((result) => {
     res.status(200).json({ message: "Feature deleted" });
   });

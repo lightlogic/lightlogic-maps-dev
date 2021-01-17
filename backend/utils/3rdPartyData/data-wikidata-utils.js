@@ -25,24 +25,10 @@ module.exports = {
       .set("Content-Type", "application/x-www-form-urlencoded")
       .end((err, res) => {
         if (err) {
-          console.log(colors.magenta(riverQuery));
+          console.log(colors.red(riverQuery));
           callback(err);
         } else if (res.body.results.bindings.length == 1) {
-          // const gewissNum_int = res.body.results.bindings[0].gewissNum.value.replace(
-          //   "CH/",
-          //   ""
-          // );
-          // const riverRes = new GeoEntity({
-          //   uri: res.body.results.bindings[0].uri.value,
-          //   domainId: gewissNum_int,
-          //   domainIdLabel: RIVER_DOMAIN_LABEL,
-          //   isA: RIVER_TYPE_URI,
-          //   description: riverName,
-          //   parentUri: null,
-          //   parentLabel: null
-          // });
           callback(undefined, res.body.results.bindings[0]);
-          //console.log(colors.magenta(res.body.results.bindings[0]));
         }
       });
   },
