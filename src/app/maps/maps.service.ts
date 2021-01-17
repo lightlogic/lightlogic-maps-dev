@@ -126,16 +126,23 @@ export class MapsService {
     // vectorSource.addFeaturess(features);
 
     // bad and dirty way to concat features selected geoJSON into one "collection"
-    //TODO change to add features objects to vector source
 
+    // methode:
+    // each feature (backend: geoEntity objects in DB) has an array of geoJSON object
+    // therefor nested foreach get every selected feature
+    // and adds each its geoJSON objects to the FeatureCollection
+    // typically Commune has only one, and river can have many geoJSON parts
     var featuresGeoJSON = '{"type": "FeatureCollection", "features": [';
     featuresSelected.forEach((feature) => {
-      featuresGeoJSON =
-      //featuresGeoJSON + JSON.stringify(feature.geoJSONraw) + ',';
-      featuresGeoJSON + JSON.stringify(feature.geoJSON) + ',';
+      feature.geoJSON.forEach((featureElement) => {
+        featuresGeoJSON =
+          featuresGeoJSON + JSON.stringify(featureElement) + ',';
+      });
     });
+
     featuresGeoJSON = featuresGeoJSON.slice(0, -1);
     featuresGeoJSON = featuresGeoJSON.concat(']}');
+    console.log(featuresGeoJSON);
 
     var myVsource = new SourceVector({
       features: new GeoJSON().readFeatures(featuresGeoJSON),
