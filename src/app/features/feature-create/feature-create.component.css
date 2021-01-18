@@ -8,3 +8,6 @@ mat-card {
 mat-spinner {
   margin: auto;
 }
+.auto-form{
+  margin: 1rem auto
+}

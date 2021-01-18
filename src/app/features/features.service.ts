@@ -4,7 +4,6 @@ import { Subject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
-
 import { Feature } from './feature.model';
 
 import { environment } from '../../environments/environment';
@@ -22,18 +21,14 @@ export class FeaturesService {
 
   getFeatures() {
     this.http
-      .get<{ message: string; features: any }>(
-        BACKEND_URL + '/geoentities'
-      )
+      .get<{ message: string; features: any }>(BACKEND_URL + '/geoentities')
       .pipe(
         map((featureData) => {
           return featureData.features.map((feature) => {
             var featureType: string = '';
             if (feature.isA == RIVER_ISA_URI) {
               featureType = 'Rivière';
-            } else if (
-              (feature.isA = ADMINUNIT_ISA_URI)
-            ) {
+            } else if ((feature.isA = ADMINUNIT_ISA_URI)) {
               featureType = 'Commune';
             }
             return {
@@ -56,7 +51,6 @@ export class FeaturesService {
       .subscribe((transformedFeatures) => {
         this.features = transformedFeatures;
         this.featuresUpdated.next([...this.features]);
-        console.log(this.features);
       });
   }
 
@@ -75,7 +69,6 @@ export class FeaturesService {
           this.featuresUpdated.next([...this.features]);
           this.router.navigate(['/display']);
         } else {
-          console.log(responseJson.message);
           this.router.navigate(['/display']);
         }
       });
@@ -106,18 +99,16 @@ export class FeaturesService {
   }
 
   deleteFeature(featureId: string) {
-    this.http
-      .delete(BACKEND_URL + '/geoentity/' + featureId)
-      .subscribe(() => {
-        // to keep in the local array of features the posts that does not have featureId
-        // and delete the one that has the featureId
-        // -> filter checks every elements of an array against a condition. It will keep the element that does NOT match the condition
-        const featuresWithoutTheDeleted = this.features.filter(
-          (feature) => feature.id !== featureId
-        );
-        this.features = featuresWithoutTheDeleted;
-        this.featuresUpdated.next([...this.features]);
-      });
+    this.http.delete(BACKEND_URL + '/geoentity/' + featureId).subscribe(() => {
+      // to keep in the local array of features the posts that does not have featureId
+      // and delete the one that has the featureId
+      // -> filter checks every elements of an array against a condition. It will keep the element that does NOT match the condition
+      const featuresWithoutTheDeleted = this.features.filter(
+        (feature) => feature.id !== featureId
+      );
+      this.features = featuresWithoutTheDeleted;
+      this.featuresUpdated.next([...this.features]);
+    });
   }
 
   toggleFeatureSelection(featureId: string, selectionToSet: boolean) {
@@ -125,10 +116,7 @@ export class FeaturesService {
       selected: selectionToSet,
     };
     this.http
-      .patch(
-        BACKEND_URL + '/geoentity/select/' + featureId,
-        selectedValue
-      )
+      .patch(BACKEND_URL + '/geoentity/select/' + featureId, selectedValue)
       .subscribe(() => {
         this.features.find((x) => x.id === featureId).selected = selectionToSet;
         this.featuresUpdated.next([...this.features]);

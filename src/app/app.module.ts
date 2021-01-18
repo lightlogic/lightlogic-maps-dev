@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -34,6 +35,7 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatInputModule,
     MatToolbarModule,
