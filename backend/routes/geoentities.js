@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const bodyparser = require("body-parser");
-const colors = require("colors");
 
 const GeoEntity = require("../models/geoEntity");
 

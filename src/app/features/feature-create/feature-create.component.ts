@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { FeaturesService } from '../features.service';
-
 @Component({
   selector: 'app-feature-create',
   templateUrl: './feature-create.component.html',
@@ -14,54 +13,65 @@ export class FeatureCreateComponent implements OnInit {
   communeControl = new FormControl();
   riverControl = new FormControl();
   idDataLoading = false;
-  comOptions: string[] = ['Ins', 'Ittigen', 'Kerzers'];
-  rivOptions: string[] = ['Thièle', 'Singine', 'Rhin'];
-  filteredComOptions: Observable<string[]>;
-  filteredRivOptions: Observable<string[]>;
+  comItems: string[] = ['Ins', 'Ittigen', 'Kerzers'];
+  rivItems: string[] = ['Thièle', 'Singine', 'Rhin'];
+  filteredComItems: Observable<string[]>;
+  filteredRivItems: Observable<string[]>;
+  private communesListSub: Subscription;
+  private riverListSub: Subscription;
 
   constructor(public featuresService: FeaturesService) {}
 
   ngOnInit() {
-    this.filteredComOptions = this.communeControl.valueChanges.pipe(
-      startWith(''),
-      map((cvalue) => this._cfilter(cvalue))
-    );
-
-    this.filteredRivOptions = this.riverControl.valueChanges.pipe(
-      startWith(''),
-      map((rvalue) => this._rfilter(rvalue))
-    );
+    this.featuresService.getItemList('commune');
+    this.communesListSub = this.featuresService
+      .getlstItemsUpdatedListener()
+      .subscribe((communes: string[]) => {
+        this.comItems = communes;
+        this.filteredComItems = this.communeControl.valueChanges.pipe(
+          startWith(''),
+          map((cvalue) => this._cfilter(cvalue))
+        );
+      });
+    this.featuresService.getItemList('river');
+    this.riverListSub = this.featuresService
+      .getlstRiversUpdatedListener()
+      .subscribe((rivers: string[]) => {
+        this.rivItems = rivers;
+        this.filteredRivItems = this.riverControl.valueChanges.pipe(
+          startWith(''),
+          map((rvalue) => this._rfilter(rvalue))
+        );
+      });
   }
 
   private _cfilter(value: string): string[] {
     const filtercValue = value.toLowerCase();
 
-    return this.comOptions.filter(coption => coption.toLowerCase().includes(filtercValue));
+    return this.comItems.filter((coption) =>
+      coption.toLowerCase().includes(filtercValue)
+    );
   }
 
   private _rfilter(value: string): string[] {
     const filterrValue = value.toLowerCase();
 
-    return this.rivOptions.filter(roption => roption.toLowerCase().includes(filterrValue));
+    return this.rivItems.filter((roption) =>
+      roption.toLowerCase().includes(filterrValue)
+    );
   }
-
-
-  // onAddCommune() {
-  //   this.idDataLoading = true;
-  //   this.featuresService.addSwisstopoCommune(
-  //     this.communeForm.value.communeName
-  //   );
-  // }
-
-  // onAddRiver() {
-  //   this.idDataLoading = true;
-  //   this.featuresService.addSwisstopoRiver(this.riverForm.value.riverName);
-  // }
 
   onPickCommune() {
-    console.log(this.communeControl.value);
+    this.idDataLoading = true;
+    this.featuresService.addSwisstopoCommune(this.communeControl.value);
   }
+
   onPickRiver() {
-    console.log(this.riverControl.value);
+    this.idDataLoading = true;
+    this.featuresService.addSwisstopoRiver(this.riverControl.value);
+  }
+
+  onClickUpdateList() {
+    console.log('Click');
   }
 }

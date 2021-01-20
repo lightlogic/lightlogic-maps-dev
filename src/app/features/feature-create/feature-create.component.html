@@ -43,15 +43,11 @@
   <form class="auto-form" (ngSubmit)="onPickCommune()">
     <mat-form-field class="example-full-width">
       <mat-label>Commune</mat-label>
-      <input type="text"
-             placeholder="Choisissez une commune"
-             aria-label="Commune1"
-             matInput
-             [formControl]="communeControl"
-             [matAutocomplete]="cauto">
+      <input type="text" placeholder="Choisissez une commune" aria-label="Commune1" matInput
+        [formControl]="communeControl" [matAutocomplete]="cauto">
       <mat-autocomplete autoActiveFirstOption #cauto="matAutocomplete">
-        <mat-option *ngFor="let comOption of filteredComOptions | async" [value]="comOption">
-          {{comOption}}
+        <mat-option *ngFor="let comItem of filteredComItems | async" [value]="comItem">
+          {{comItem}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
@@ -60,35 +56,15 @@
   <form class="auto-form" (ngSubmit)="onPickRiver()">
     <mat-form-field class="example-full-width">
       <mat-label>Rivière</mat-label>
-      <input type="text"
-             placeholder="Choisissez un cours d'eau"
-             aria-label="River1"
-             matInput
-             [formControl]="riverControl"
-             [matAutocomplete]="rauto">
+      <input type="text" placeholder="Choisissez un cours d'eau" aria-label="River1" matInput
+        [formControl]="riverControl" [matAutocomplete]="rauto">
       <mat-autocomplete autoActiveFirstOption #rauto="matAutocomplete">
-        <mat-option *ngFor="let rivOption of filteredRivOptions | async" [value]="rivOption">
-          {{rivOption}}
+        <mat-option *ngFor="let rivItem of filteredRivItems | async" [value]="rivItem">
+          {{rivItem}}
         </mat-option>
       </mat-autocomplete>
     </mat-form-field>
     <button mat-raised-button color="accent" type="submit">Add</button>
   </form>
-  <!-- <form [formGroup]="autoCommuneForm" (ngSubmit)="onPickCommune()">
-    <mat-form-field class="example-full-width">
-      <mat-label>Commune</mat-label>
-      <input type="text"
-      placeholder="Choisssez une commune"
-      aria-label="Commune"
-      matInput
-      formControlName="autoCommuneControl"
-      [matAutocomplete]="autoCom">
-      <mat-autocomplete #autoCom="matAutocomplete">
-        <mat-option *ngFor="let commune of filteredOptions | async" [value]="commune">
-          {{commune}}
-        </mat-option>
-      </mat-autocomplete>
-    </mat-form-field>
-    <button mat-raised-button color="accent" type="submit">Add</button>
-  </form> -->
+  <button mat-raised-button color="primary" (click)="onClickUpdateList()">UPDATE</button>
 </mat-card>

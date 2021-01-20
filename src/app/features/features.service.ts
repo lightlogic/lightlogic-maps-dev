@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { Feature } from './feature.model';
 
 import { environment } from '../../environments/environment';
+
 const BACKEND_URL = environment.apiURL;
 const RIVER_ISA_URI = environment.featureRiver_isA_URI;
 const ADMINUNIT_ISA_URI = environment.featureAdminUnit_isA_URI;
@@ -14,6 +15,10 @@ const ADMINUNIT_ISA_URI = environment.featureAdminUnit_isA_URI;
 @Injectable({ providedIn: 'root' })
 export class FeaturesService {
   private features: Feature[] = [];
+  private lstCommunes: string[] = [];
+  private lstRivers: string[] = [];
+  private lstCommunesUpdated = new Subject<string[]>();
+  private lstRiversUpdated = new Subject<string[]>();
   private featuresUpdated = new Subject<Feature[]>();
   private featuresSelected = new Subject<Feature[]>();
 
@@ -51,6 +56,36 @@ export class FeaturesService {
       .subscribe((transformedFeatures) => {
         this.features = transformedFeatures;
         this.featuresUpdated.next([...this.features]);
+      });
+  }
+
+  getItemList(itemType: string) {
+    this.http
+      .get<{ message: string; items: any }>(BACKEND_URL + '/lists/' + itemType)
+      .pipe(
+        map((itemsData) => {
+          //return itemsData.items.label;
+          return itemsData.items.map((item) => {
+            return {
+              label: item.label,
+            };
+          });
+        })
+      )
+      .subscribe((recList) => {
+        if (itemType == 'commune') {
+          this.lstCommunes.length = 0;
+          recList.forEach((itLabel) => {
+            this.lstCommunes.push(itLabel.label);
+          });
+          this.lstCommunesUpdated.next([...this.lstCommunes]);
+        } else if (itemType == 'river') {
+          this.lstRivers.length = 0;
+          recList.forEach((itLabel) => {
+            this.lstRivers.push(itLabel.label);
+          });
+          this.lstRiversUpdated.next([...this.lstRivers]);
+        }
       });
   }
 
@@ -125,5 +160,13 @@ export class FeaturesService {
 
   getFeaturesSelectedListener() {
     return this.featuresSelected.asObservable();
+  }
+
+  getlstItemsUpdatedListener() {
+    return this.lstCommunesUpdated.asObservable();
+  }
+
+  getlstRiversUpdatedListener() {
+    return this.lstRiversUpdated.asObservable();
   }
 }
