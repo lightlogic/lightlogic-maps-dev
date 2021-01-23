@@ -12,7 +12,7 @@ import { FeaturesService } from '../features.service';
 export class FeatureCreateComponent implements OnInit {
   communeControl = new FormControl();
   riverControl = new FormControl();
-  idDataLoading = false;
+  isDataLoading = false;
   comItems: string[] = ['Ins', 'Ittigen', 'Kerzers'];
   rivItems: string[] = ['Thièle', 'Singine', 'Rhin'];
   filteredComItems: Observable<string[]>;
@@ -62,16 +62,17 @@ export class FeatureCreateComponent implements OnInit {
   }
 
   onPickCommune() {
-    this.idDataLoading = true;
+    this.isDataLoading = true;
     this.featuresService.addSwisstopoCommune(this.communeControl.value);
   }
 
   onPickRiver() {
-    this.idDataLoading = true;
+    this.isDataLoading = true;
     this.featuresService.addSwisstopoRiver(this.riverControl.value);
   }
 
   onClickUpdateList() {
-    console.log('Click');
+    this.isDataLoading = true;
+    this.featuresService.updateListCommunes("commune")
   }
 }

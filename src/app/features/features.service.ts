@@ -158,6 +158,17 @@ export class FeaturesService {
       });
   }
 
+  updateListCommunes(itemType: string) {
+    const typeValue = {
+      itemTypeValue: itemType,
+    };
+    this.http
+      .patch(BACKEND_URL + '/lists', typeValue)
+      .subscribe((responseJson) => {
+        console.log(responseJson)
+      });
+  }
+
   getFeaturesSelectedListener() {
     return this.featuresSelected.asObservable();
   }
