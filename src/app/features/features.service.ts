@@ -158,25 +158,43 @@ export class FeaturesService {
       });
   }
 
-  updateListCommunes(itemType: string) {
+  updateListItems(itemType: string) {
     const typeValue = {
       itemTypeValue: itemType,
     };
     this.http
       .patch(BACKEND_URL + '/lists', typeValue)
       .subscribe((responseJson) => {
-        this.lstCommunesUpdated.next();
+        if (itemType == 'commune') {
+          this.lstCommunes.length = 0;
+          this.lstCommunesUpdated.next();
+          this.router.navigate(['/create']);
+        } else if (itemType == 'river'){
+        console.log(responseJson)
+        this.lstRivers.length = 0;
+        this.lstRiversUpdated.next();
         this.router.navigate(['/create']);
-      });
+      }
+      }
+      );
   }
 
-  purgeListCommunes(itemType: string) {
+  purgeListItems(itemType: string) {
     this.http
       .delete(BACKEND_URL + '/lists/' + itemType)
       .subscribe((responseJson) => {
-        this.lstCommunesUpdated.next();
+        if (itemType == 'commune') {
+          this.lstCommunes.length = 0;
+          this.lstCommunesUpdated.next();
+          this.router.navigate(['/create']);
+        } else if (itemType == 'river'){
+        console.log(responseJson)
+        this.lstRivers.length = 0;
+        this.lstRiversUpdated.next();
         this.router.navigate(['/create']);
-      });
+      }
+      }
+      );
   }
 
   getFeaturesSelectedListener() {

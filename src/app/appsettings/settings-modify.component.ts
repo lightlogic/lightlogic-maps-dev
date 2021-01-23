@@ -11,13 +11,13 @@ export class SettingsModifyComponent {
 
   constructor(public featuresService: FeaturesService) {}
 
-  onClickUpdateList() {
+  onClickUpdateList(itemType: string) {
     this.isDataLoading = true;
-    this.featuresService.updateListCommunes("commune")
+    this.featuresService.updateListItems(itemType)
   }
 
-  onClickDeleteList() {
+  onClickDeleteList(itemType: string) {
     this.isDataLoading = true;
-    this.featuresService.purgeListCommunes("commune")
+    this.featuresService.purgeListItems(itemType)
   }
 }
