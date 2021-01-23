@@ -5,12 +5,16 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
 import { FeatureListComponent } from './features/feature-list/feature-list.component';
 import { SettingsModifyComponent } from './appsettings/settings-modify.component';
 import { HydroMapComponent } from './maps/geomap/geomap.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 const routes: Routes = [
   { path: '', component: HydroMapComponent },
   { path: 'display', component: FeatureListComponent },
   { path: 'create', component: FeatureCreateComponent },
   { path: 'configure', component: SettingsModifyComponent },
+  { path: 'login', component: LoginComponent },
+  { path: 'signup', component: SignupComponent },
 ];
 
 @NgModule({

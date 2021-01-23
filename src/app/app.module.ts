@@ -20,6 +20,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { FeatureListComponent } from './features/feature-list/feature-list.component';
 import { FeatureCreateComponent } from './features/feature-create/feature-create.component';
 import { SettingsModifyComponent } from './appsettings/settings-modify.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +30,9 @@ import { SettingsModifyComponent } from './appsettings/settings-modify.component
     HydroMapComponent,
     FeatureListComponent,
     FeatureCreateComponent,
-    SettingsModifyComponent
+    SettingsModifyComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,

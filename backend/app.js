@@ -6,7 +6,7 @@ const colors = require("colors");
 const geoEntityRoutes = require('./routes/geoentity');
 const geoEntitiesRoutes = require('./routes/geoentities');
 const listsRoutes = require('./routes/lists');
-
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -47,5 +47,6 @@ app.use((req, res, next) => {
 app.use("/api/geoentity", geoEntityRoutes);
 app.use("/api/geoentities", geoEntitiesRoutes);
 app.use("/api/lists", listsRoutes);
+app.use("/api/user", userRoutes);
 
 module.exports = app;

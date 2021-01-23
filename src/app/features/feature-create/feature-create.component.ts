@@ -5,7 +5,6 @@ import { map, startWith } from 'rxjs/operators';
 
 import { FeaturesService } from '../features.service';
 @Component({
-  selector: 'app-feature-create',
   templateUrl: './feature-create.component.html',
   styleUrls: ['./feature-create.component.css'],
 })
