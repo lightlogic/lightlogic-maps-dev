@@ -5,6 +5,8 @@ const colors = require("colors");
 
 const geoEntityRoutes = require('./routes/geoentity');
 const geoEntitiesRoutes = require('./routes/geoentities');
+const listsRoutes = require('./routes/lists');
+
 
 const app = express();
 
@@ -44,5 +46,6 @@ app.use((req, res, next) => {
 // forwared in ./routes/geoentities.js
 app.use("/api/geoentity", geoEntityRoutes);
 app.use("/api/geoentities", geoEntitiesRoutes);
+app.use("/api/lists", listsRoutes);
 
 module.exports = app;

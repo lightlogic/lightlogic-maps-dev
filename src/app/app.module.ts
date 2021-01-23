@@ -5,6 +5,7 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatAutocompleteModule} from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
@@ -18,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FeatureListComponent } from './features/feature-list/feature-list.component';
 import { FeatureCreateComponent } from './features/feature-create/feature-create.component';
+import { SettingsModifyComponent } from './appsettings/settings-modify.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
     HydroMapComponent,
     FeatureListComponent,
     FeatureCreateComponent,
+    SettingsModifyComponent
   ],
   imports: [
     BrowserModule,
@@ -34,6 +37,7 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
     ReactiveFormsModule,
     BrowserAnimationsModule,
     MatFormFieldModule,
+    MatAutocompleteModule,
     MatProgressSpinnerModule,
     MatInputModule,
     MatToolbarModule,

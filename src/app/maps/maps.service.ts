@@ -142,7 +142,6 @@ export class MapsService {
 
     featuresGeoJSON = featuresGeoJSON.slice(0, -1);
     featuresGeoJSON = featuresGeoJSON.concat(']}');
-    console.log(featuresGeoJSON);
 
     var myVsource = new SourceVector({
       features: new GeoJSON().readFeatures(featuresGeoJSON),

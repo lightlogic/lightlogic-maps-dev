@@ -1,0 +1,33 @@
+<mat-spinner *ngIf="isDataLoading"></mat-spinner>
+<mat-card *ngIf="!isDataLoading">
+  <mat-card-header>
+    <mat-card-title>
+      GESTION LISTE COMMUNES
+    </mat-card-title>
+    <mat-card-subtitle>Mise à jour des communes</mat-card-subtitle>
+  </mat-card-header>
+  <p>
+    <button mat-raised-button color="primary" (click)="onClickUpdateList('commune')">UPDATE</button><br />
+    Ajoute toutes les communes suisses à la liste d'ajout d'éléments
+  </p>
+  <p>
+    <button mat-raised-button color="accent" (click)="onClickDeleteList('commune')">PURGE</button><br />
+    Supprime toutes les communes suisses de la liste d'ajouts d'éléments
+  </p>
+</mat-card>
+  <mat-card *ngIf="!isDataLoading">
+    <mat-card-header>
+      <mat-card-title>
+        GESTION LISTE RIVIERES
+      </mat-card-title>
+      <mat-card-subtitle>Mise à jour des rivières</mat-card-subtitle>
+    </mat-card-header>
+  <p>
+    <button mat-raised-button color="primary" (click)="onClickUpdateList('river')">UPDATE</button><br />
+    Ajoute toutes les rivières suisses à la liste d'ajout d'éléments
+  </p>
+  <p>
+    <button mat-raised-button color="accent" (click)="onClickDeleteList('river')">PURGE</button><br />
+    Supprime toutes les rivières suisses de la liste d'ajouts d'éléments
+  </p>
+</mat-card>

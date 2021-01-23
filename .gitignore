@@ -48,3 +48,7 @@ Thumbs.db
 # secret configuration files
 # mongoDB config
 nodemon.json
+
+# documentation de développement
+# geoJSON files, sample vector data, etc
+/_dev_documentation
