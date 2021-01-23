@@ -29,7 +29,7 @@ module.exports = {
   getCommunesSwitzerland: function (noValue, callback) {
     GEOADMIN_SPARQL_EP = "https://ld.geo.admin.ch/query";
     const communeQuery =
-      "query=PREFIX+gn%3A+%3Chttp%3A%2F%2Fwww.geonames.org%2Fontology%23%3E%0APREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0ASELECT+%3Flabel+WHERE+%7B%0A%3Fitem+a+schema%3AAdministrativeArea+.%0A%3Fitem+schema%3Aname+%3Flabel+.%09%0A%3Fitem+gn%3AfeatureCode+gn%3AA.ADM3+.%0A%7D&contentTypeConstruct=text%2Fturtle&contentTypeSelect=application%2Fsparql-results%2Bjson&endpoint=https%3A%2F%2Fld.geo.admin.ch%2Fquery&requestMethod=POST&tabTitle=Query&headers=%7B%7D&outputFormat=rawResponse";
+      "query=PREFIX+gn%3A+%3Chttp%3A%2F%2Fwww.geonames.org%2Fontology%23%3E%0APREFIX+schema%3A+%3Chttp%3A%2F%2Fschema.org%2F%3E%0ASELECT+%3Flabel+WHERE+%7B%0A%3Fitem+a+schema%3AAdministrativeArea+.%0A%3Fitem+schema%3Aname+%3Flabel+.%09%0A%3Fitem+gn%3AfeatureCode+gn%3AA.ADM3+.%0A%7D+ORDER+BY+ASC(%3Flabel)&contentTypeConstruct=text%2Fturtle&contentTypeSelect=application%2Fsparql-results%2Bjson&endpoint=https%3A%2F%2Fld.geo.admin.ch%2Fquery&requestMethod=POST&tabTitle=Query&headers=%7B%7D&outputFormat=rawResponse";
     request
       .post(GEOADMIN_SPARQL_EP)
       .send(communeQuery)

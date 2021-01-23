@@ -165,7 +165,15 @@ export class FeaturesService {
     this.http
       .patch(BACKEND_URL + '/lists', typeValue)
       .subscribe((responseJson) => {
-        console.log(responseJson)
+        this.lstCommunesUpdated.next();
+      });
+  }
+
+  purgeListCommunes(itemType: string) {
+    this.http
+      .delete(BACKEND_URL + '/lists/' + itemType)
+      .subscribe((responseJson) => {
+        this.lstCommunesUpdated.next();
       });
   }
 
