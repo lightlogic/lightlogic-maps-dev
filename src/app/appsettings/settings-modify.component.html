@@ -1,0 +1,17 @@
+<mat-spinner *ngIf="isDataLoading"></mat-spinner>
+<mat-card *ngIf="!isDataLoading">
+  <mat-card-header>
+    <mat-card-title>
+      GESTION LISTE ÉLÉMENTS
+    </mat-card-title>
+    <mat-card-subtitle>Mise à jour des éléments géographiques</mat-card-subtitle>
+  </mat-card-header>
+  <p>
+    <button mat-raised-button color="primary" (click)="onClickUpdateList()">UPDATE</button><br />
+    Ajoute tous les communes suisses à la liste d'ajout d'éléments
+  </p>
+  <p>
+    <button mat-raised-button color="accent" (click)="onClickDeleteList()">PURGE</button><br />
+    Supprime toute les communes suisses de la liste d'ajouts d'éléments
+  </p>
+</mat-card>

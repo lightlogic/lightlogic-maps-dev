@@ -166,7 +166,7 @@ export class FeaturesService {
       .patch(BACKEND_URL + '/lists', typeValue)
       .subscribe((responseJson) => {
         this.lstCommunesUpdated.next();
-        this.router.navigate(['/display']);
+        this.router.navigate(['/create']);
       });
   }
 
@@ -175,7 +175,7 @@ export class FeaturesService {
       .delete(BACKEND_URL + '/lists/' + itemType)
       .subscribe((responseJson) => {
         this.lstCommunesUpdated.next();
-        this.router.navigate(['/display']);
+        this.router.navigate(['/create']);
       });
   }
 

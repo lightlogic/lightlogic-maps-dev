@@ -19,6 +19,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FeatureListComponent } from './features/feature-list/feature-list.component';
 import { FeatureCreateComponent } from './features/feature-create/feature-create.component';
+import { SettingsModifyComponent } from './appsettings/settings-modify.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { FeatureCreateComponent } from './features/feature-create/feature-create
     HydroMapComponent,
     FeatureListComponent,
     FeatureCreateComponent,
+    SettingsModifyComponent
   ],
   imports: [
     BrowserModule,

@@ -70,14 +70,4 @@ export class FeatureCreateComponent implements OnInit {
     this.isDataLoading = true;
     this.featuresService.addSwisstopoRiver(this.riverControl.value);
   }
-
-  onClickUpdateList() {
-    this.isDataLoading = true;
-    this.featuresService.updateListCommunes("commune")
-  }
-
-  onClickDeleteList() {
-    this.isDataLoading = true;
-    this.featuresService.purgeListCommunes("commune")
-  }
 }
