@@ -8,6 +8,8 @@ const BACKEND_URL = environment.apiURL;
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
+  private token: string;
+
   constructor(private http: HttpClient) {}
 
   createUser(email: string, password: string) {
@@ -29,9 +31,14 @@ export class AuthService {
       password: password,
     };
     this.http
-      .post(BACKEND_URL + '/user/login', authData)
+      .post<{token: string}>(BACKEND_URL + '/user/login', authData)
       .subscribe((response) => {
-        console.log(response);
+        const token = response.token;
+        this.token = token;
       });
+  }
+
+  getToken() {
+    return this.token;
   }
 }
