@@ -170,7 +170,6 @@ export class FeaturesService {
           this.lstCommunesUpdated.next();
           this.router.navigate(['/create']);
         } else if (itemType == 'river'){
-        console.log(responseJson)
         this.lstRivers.length = 0;
         this.lstRiversUpdated.next();
         this.router.navigate(['/create']);
@@ -188,7 +187,6 @@ export class FeaturesService {
           this.lstCommunesUpdated.next();
           this.router.navigate(['/create']);
         } else if (itemType == 'river'){
-        console.log(responseJson)
         this.lstRivers.length = 0;
         this.lstRiversUpdated.next();
         this.router.navigate(['/create']);

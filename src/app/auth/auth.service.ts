@@ -78,7 +78,6 @@ export class AuthService {
     if (!authInformation) {
       return;
     }
-    console.log(authInformation);
     const now = new Date();
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
     if (expiresIn > 0) {
@@ -99,7 +98,6 @@ export class AuthService {
   }
 
   private setAuthTimer(duration: number) {
-    console.log('Setting timer: ' + duration);
     // setTimeout is in milliseconds and expiresInDuration was set in seconds
     this.tokenTimer = setTimeout(() => {
       this.logout();
@@ -107,7 +105,6 @@ export class AuthService {
   }
 
   private saveAuthData(token: string, expirationDate: Date) {
-    console.log(token);
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
   }
