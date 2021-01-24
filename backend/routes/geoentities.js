@@ -16,6 +16,11 @@ router.get("", (req, res, next) => {
       message: "Features fetched successfully !",
       features: documents,
     });
+  })
+  .catch((error) => {
+    res.status(500).json({
+      message: "Fetching geoEntities failed!",
+    });
   });
 });
 
