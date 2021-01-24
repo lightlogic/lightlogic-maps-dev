@@ -22,11 +22,26 @@ export class AuthService {
       email: email,
       password: password,
     };
-
     this.http
-      .post(BACKEND_URL + '/user/signup', authData)
+      .post<{ token: string; expiresIn: number }>(
+        BACKEND_URL + '/user/signup',
+        authData
+      )
       .subscribe((response) => {
-        console.log(response);
+        const token = response.token;
+        this.token = token;
+        if (token) {
+          const expiresInDuration = response.expiresIn;
+          this.setAuthTimer(expiresInDuration);
+          this.isAuthenticated = true;
+          this.authStatusListener.next(true);
+          const now = new Date();
+          const expirationDate = new Date(
+            now.getTime() + expiresInDuration * 1000
+          );
+          this.saveAuthData(token, expirationDate);
+          this.router.navigate(['/display']);
+        }
       });
   }
 
@@ -45,7 +60,7 @@ export class AuthService {
         this.token = token;
         if (token) {
           const expiresInDuration = response.expiresIn;
-          this.setAuthTimer(expiresInDuration)
+          this.setAuthTimer(expiresInDuration);
           this.isAuthenticated = true;
           this.authStatusListener.next(true);
           const now = new Date();
@@ -63,13 +78,13 @@ export class AuthService {
     if (!authInformation) {
       return;
     }
-    console.log(authInformation)
+    console.log(authInformation);
     const now = new Date();
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
     if (expiresIn > 0) {
       this.token = authInformation.token;
       this.isAuthenticated = true;
-      this.setAuthTimer(expiresIn/1000)
+      this.setAuthTimer(expiresIn / 1000);
       this.authStatusListener.next(true);
     }
   }
@@ -80,11 +95,11 @@ export class AuthService {
     this.authStatusListener.next(false);
     clearTimeout(this.tokenTimer);
     this.clearAuthData();
-    this.router.navigate(['/']);
+    this.router.navigate(['/display']);
   }
 
   private setAuthTimer(duration: number) {
-    console.log("Setting timer: " + duration)
+    console.log('Setting timer: ' + duration);
     // setTimeout is in milliseconds and expiresInDuration was set in seconds
     this.tokenTimer = setTimeout(() => {
       this.logout();
@@ -92,19 +107,19 @@ export class AuthService {
   }
 
   private saveAuthData(token: string, expirationDate: Date) {
-    console.log(token)
-    localStorage.setItem("token", token);
-    localStorage.setItem("expiration", expirationDate.toISOString());
+    console.log(token);
+    localStorage.setItem('token', token);
+    localStorage.setItem('expiration', expirationDate.toISOString());
   }
 
   private clearAuthData() {
-    localStorage.removeItem("token");
-    localStorage.removeItem("expiration");
+    localStorage.removeItem('token');
+    localStorage.removeItem('expiration');
   }
 
   private getAuthData() {
-    const token = localStorage.getItem("token");
-    const expirationDate = localStorage.getItem("expiration");
+    const token = localStorage.getItem('token');
+    const expirationDate = localStorage.getItem('expiration');
     if (!token || !expirationDate) {
       return;
     }

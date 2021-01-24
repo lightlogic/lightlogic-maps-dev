@@ -3,6 +3,7 @@ const router = express.Router();
 const bodyparser = require("body-parser");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const colors = require("colors");
 
 const User = require("../models/user");
 const user = require("../models/user");
@@ -18,9 +19,19 @@ router.post("/signup", (req, res, next) => {
     newUser
       .save()
       .then((result) => {
+        const token = jwt.sign(
+          {
+            email: result.email,
+            userId: result._id,
+          },
+          process.env.JWT_SECRET,
+          {
+            expiresIn: "1h",
+          }
+        );
         res.status(201).json({
-          message: "New user added",
-          result: result,
+          token: token,
+          expiresIn: 3600,
         });
       })
       .catch((err) => {
@@ -64,7 +75,7 @@ router.post("/login", (req, res, next) => {
       res.status(200).json({
         token: token,
         // duration in secounds until it expires
-        expiresIn: 3600
+        expiresIn: 3600,
       });
     })
     .catch((err) => {
