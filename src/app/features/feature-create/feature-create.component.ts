@@ -4,8 +4,9 @@ import { Observable, Subscription } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
 
 import { FeaturesService } from '../features.service';
+import { AuthService } from 'src/app/auth/auth.service';
+
 @Component({
-  selector: 'app-feature-create',
   templateUrl: './feature-create.component.html',
   styleUrls: ['./feature-create.component.css'],
 })

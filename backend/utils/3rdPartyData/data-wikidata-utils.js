@@ -1,8 +1,6 @@
 const request = require("superagent");
 const colors = require("colors");
 
-const GeoEntity = require("../../models/geoEntity");
-
 // Module fetching data from https://query.wikidata.org/
 module.exports = {
   getWikidataRiver: function (riverName, callback) {

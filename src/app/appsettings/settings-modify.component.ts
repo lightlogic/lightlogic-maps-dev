@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 
 import { FeaturesService } from '../features/features.service';
 @Component({
-  selector: 'app-settings-modify',
   templateUrl: './settings-modify.component.html',
   styleUrls: ['./settings-modify.component.css'],
 })
@@ -13,11 +12,11 @@ export class SettingsModifyComponent {
 
   onClickUpdateList(itemType: string) {
     this.isDataLoading = true;
-    this.featuresService.updateListItems(itemType)
+    this.featuresService.updateListItems(itemType);
   }
 
   onClickDeleteList(itemType: string) {
     this.isDataLoading = true;
-    this.featuresService.purgeListItems(itemType)
+    this.featuresService.purgeListItems(itemType);
   }
 }

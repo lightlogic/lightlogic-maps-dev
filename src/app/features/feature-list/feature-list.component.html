@@ -18,12 +18,11 @@
     <p>Parent: {{ feature.parentFeature }}</p>
     <p>Bounding box: {{ feature.bbox }}</p>
     <mat-action-row>
-
       <button *ngIf="feature.selected; else elseButtonBlock" mat-button color="primary"
         (click)="onToggleFeatureSelection(feature.id,false)">DE-SELECT</button>
       <ng-template #elseButtonBlock><button mat-button color="primary"
           (click)="onToggleFeatureSelection(feature.id,true)">SELECT</button></ng-template>
-      <button mat-button color="warn" (click)="onDeleteFeature(feature.id)">DELETE</button>
+      <button mat-button *ngIf="userIsAuthenticated" color="warn" (click)="onDeleteFeature(feature.id)">DELETE</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>

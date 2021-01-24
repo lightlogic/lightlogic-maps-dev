@@ -15,11 +15,14 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { HeaderComponent } from './header/header.component';
 import { HydroMapComponent } from './maps/geomap/geomap.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { FeatureListComponent } from './features/feature-list/feature-list.component';
 import { FeatureCreateComponent } from './features/feature-create/feature-create.component';
 import { SettingsModifyComponent } from './appsettings/settings-modify.component';
+import { LoginComponent } from './auth/login/login.component';
+import { SignupComponent } from './auth/signup/signup.component';
+import { AuthInterceptor } from './auth/auth-interceptor';
 
 @NgModule({
   declarations: [
@@ -28,7 +31,9 @@ import { SettingsModifyComponent } from './appsettings/settings-modify.component
     HydroMapComponent,
     FeatureListComponent,
     FeatureCreateComponent,
-    SettingsModifyComponent
+    SettingsModifyComponent,
+    LoginComponent,
+    SignupComponent
   ],
   imports: [
     BrowserModule,
@@ -46,7 +51,7 @@ import { SettingsModifyComponent } from './appsettings/settings-modify.component
     MatButtonModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [{provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ const bodyparser = require("body-parser");
 const colors = require("colors")
 
 const ListItem = require("../models/listItem");
+const checkAuth = require("../middleware/check-auth")
 const geodataLDGeoAdminUtils = require("../utils/3rdPartyData/geodata-LDGeoAdmin-utils");
 const wikidataUtils = require("../utils/3rdPartyData/data-wikidata-utils");
 
@@ -23,7 +24,7 @@ router.get("/:itemType", (req, res, next) => {
   });
 });
 
-router.patch("", (req, res, next) => {
+router.patch("", checkAuth, (req, res, next) => {
   if (req.body.itemTypeValue == COMMUNE_TYPE) {
     geodataLDGeoAdminUtils.getCommunesSwitzerland(
       req.body.itemTypeValue,(error, listItemsData) => {
@@ -61,7 +62,7 @@ router.patch("", (req, res, next) => {
   })}
 });
 
-router.delete("/:itemType", (req, res, next) => {
+router.delete("/:itemType", checkAuth, (req, res, next) => {
   if (req.params.itemType == COMMUNE_TYPE || req.params.itemType == RIVER_TYPE) {
     ListItem.deleteMany({ itemType: req.params.itemType }).then((documents) => {
       res.status(200).json({

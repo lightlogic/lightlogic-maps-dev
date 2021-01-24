@@ -4,7 +4,7 @@ const bodyparser = require("body-parser");
 const colors = require("colors");
 
 const GeoEntity = require("../models/geoEntity");
-
+const checkAuth = require("../middleware/check-auth");
 const geoEntityUtils = require("../utils/geoEntity/geoEntityUtils");
 
 router.use(bodyparser.json());
@@ -12,7 +12,7 @@ router.use(bodyparser.json());
 // post new commune based on name
 // method POST
 // path: /api/geoentity/swisstopo
-router.post("/swisstopo/adminunit", (req, res, next) => {
+router.post("/swisstopo/adminunit", checkAuth, (req, res, next) => {
   const COMMUNE_TYPE_URI = process.env.ADMINUNIT_ISA_URI;
   const geoEntityType_Commune = process.env.ADMINUNIT_TYPE;
   const COMMUNE_DOMAIN_LABEL = "bfsNum";
@@ -66,7 +66,7 @@ router.post("/swisstopo/adminunit", (req, res, next) => {
 // post new river based on name
 // method POST
 // path: /api/geoentity/swisstopo/river
-router.post("/swisstopo/river", (req, res, next) => {
+router.post("/swisstopo/river", checkAuth, (req, res, next) => {
   RIVER_isA_URI = process.env.RIVER_ISA_URI;
   const geoEntityType_river = process.env.RIVER_TYPE;
   const domainIdLabel = "gewissNum";
@@ -167,7 +167,7 @@ router.patch("/select/:id", (req, res, next) => {
 
 // methode DELETE
 // path: /api/geoentity/fi111jej3iojofidj
-router.delete("/:id", (req, res, next) => {
+router.delete("/:id", checkAuth, (req, res, next) => {
   GeoEntity.deleteOne({ _id: req.params.id }).then((result) => {
     res.status(200).json({ message: "Feature deleted" });
   });
