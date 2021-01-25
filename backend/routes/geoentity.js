@@ -36,17 +36,20 @@ router.post("/swisstopo/adminunit", checkAuth, (req, res, next) => {
               communeEntity,
               layerBodID_communes,
               (gerror, geoJsonData) => {
-                if (gerror) {
-                  console.log(colors.red(gerror));
-                } else {
-                  communeEntity.geoJSON = geoJsonData.geoJSON;
-                  communeEntity.save().then((createdEntity) => {
+                communeEntity.geoJSON = geoJsonData.geoJSON;
+                communeEntity
+                  .save()
+                  .then((createdEntity) => {
                     res.status(201).json({
                       message: "Commune retrieved and cached.",
                       feature: createdEntity,
                     });
+                  })
+                  .catch((error) => {
+                    res.status(500).json({
+                      message: "Adding a new commune failed.",
+                    });
                   });
-                }
               }
             );
           }
@@ -81,27 +84,30 @@ router.post("/swisstopo/river", checkAuth, (req, res, next) => {
         RIVER_isA_URI,
         domainIdLabel,
         (cerror, riverEntity) => {
-          if (cerror) {
-            console.log(colors.red(cerror));
-          } else {
-            geoEntityUtils.fetchGeoJson(
-              riverEntity,
-              layerBodId_rivers,
-              (gerror, geoJsonData) => {
-                if (gerror) {
-                  console.log(colors.red(gerror));
-                } else {
-                  riverEntity.geoJSON = geoJsonData.geoJSON.results;
-                  riverEntity.save().then((createdEntity) => {
+          geoEntityUtils.fetchGeoJson(
+            riverEntity,
+            layerBodId_rivers,
+            (gerror, geoJsonData) => {
+              if (gerror) {
+                console.log(colors.red(gerror));
+              } else {
+                riverEntity.geoJSON = geoJsonData.geoJSON.results;
+                riverEntity
+                  .save()
+                  .then((createdEntity) => {
                     res.status(201).json({
                       message: "River retrieved and cached.",
                       feature: createdEntity,
                     });
+                  })
+                  .catch((error) => {
+                    res.status(500).json({
+                      message: "Adding a new river failed.",
+                    });
                   });
-                }
               }
-            );
-          }
+            }
+          );
         }
       );
       //riverData is defined => the metadata of this commune is allready cached in MongoDB

@@ -22,27 +22,19 @@ export class AuthService {
       email: email,
       password: password,
     };
-    this.http
+    return this.http
       .post<{ token: string; expiresIn: number }>(
         BACKEND_URL + '/user/signup',
         authData
       )
-      .subscribe((response) => {
-        const token = response.token;
-        this.token = token;
-        if (token) {
-          const expiresInDuration = response.expiresIn;
-          this.setAuthTimer(expiresInDuration);
-          this.isAuthenticated = true;
-          this.authStatusListener.next(true);
-          const now = new Date();
-          const expirationDate = new Date(
-            now.getTime() + expiresInDuration * 1000
-          );
-          this.saveAuthData(token, expirationDate);
+      .subscribe(
+        () => {
           this.router.navigate(['/display']);
+        },
+        (error) => {
+          this.authStatusListener.next(false);
         }
-      });
+      );
   }
 
   login(email: string, password: string) {
@@ -67,10 +59,14 @@ export class AuthService {
           const expirationDate = new Date(
             now.getTime() + expiresInDuration * 1000
           );
+          console.log(expirationDate)
           this.saveAuthData(token, expirationDate);
           this.router.navigate(['/display']);
         }
-      });
+      }),
+      (error) => {
+        this.authStatusListener.next(false);
+      };
   }
 
   autoAuthUser() {
@@ -80,6 +76,7 @@ export class AuthService {
     }
     const now = new Date();
     const expiresIn = authInformation.expirationDate.getTime() - now.getTime();
+    console.log(expiresIn);
     if (expiresIn > 0) {
       this.token = authInformation.token;
       this.isAuthenticated = true;
@@ -105,6 +102,7 @@ export class AuthService {
   }
 
   private saveAuthData(token: string, expirationDate: Date) {
+    console.log(token, expirationDate)
     localStorage.setItem('token', token);
     localStorage.setItem('expiration', expirationDate.toISOString());
   }
