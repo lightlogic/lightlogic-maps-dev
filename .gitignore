@@ -52,3 +52,6 @@ nodemon.json
 # documentation de développement
 # geoJSON files, sample vector data, etc
 /_dev_documentation
+
+# build folder for angular in backend folder
+/backend/angular
