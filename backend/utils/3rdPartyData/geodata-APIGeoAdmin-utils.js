@@ -8,6 +8,8 @@ const GEOADMIN_API_URL =
 // Feature Resource
 // With an ID (or several in a comma separated list) and a layer ID (technical name),
 // this service can be used to retrieve a feature resource.
+
+//TODO #23 error handling when fetching data from api3.geo.admin.ch
 module.exports = {
   getCommuneGeoJSON: function (communeBFSnum, callback) {
     LAYER_ID = "ch.swisstopo.swissboundaries3d-gemeinde-flaeche.fill";

@@ -2,6 +2,8 @@ const request = require("superagent");
 const colors = require("colors");
 
 // Module fetching data from https://query.wikidata.org/
+
+//TODO #22 error handling when fetching data from Wikidata Sparql Endpoint
 module.exports = {
   getWikidataRiver: function (riverName, callback) {
     //TODO move constant to env file

@@ -1,6 +1,7 @@
 const path = require("path");
-const dotenv = require('dotenv');
 const express = require("express");
+const dotenv = require("dotenv");
+const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const colors = require("colors");
@@ -10,10 +11,15 @@ const geoEntitiesRoutes = require("./routes/geoentities");
 const listsRoutes = require("./routes/lists");
 const userRoutes = require("./routes/user");
 
+// Load env vars
+dotenv.config({ path: "./config/config.env" });
+
 const app = express();
 
-// Load env vars
-dotenv.config({ path: './config/config.env' });
+// Dev logging middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("dev"));
+}
 
 mongoose
   // Mongo connection string example
