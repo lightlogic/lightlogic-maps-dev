@@ -1,14 +1,19 @@
+const path = require("path");
+const dotenv = require('dotenv');
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const colors = require("colors");
 
-const geoEntityRoutes = require('./routes/geoentity');
-const geoEntitiesRoutes = require('./routes/geoentities');
-const listsRoutes = require('./routes/lists');
-const userRoutes = require('./routes/user');
+const geoEntityRoutes = require("./routes/geoentity");
+const geoEntitiesRoutes = require("./routes/geoentities");
+const listsRoutes = require("./routes/lists");
+const userRoutes = require("./routes/user");
 
 const app = express();
+
+// Load env vars
+dotenv.config({ path: './config/config.env' });
 
 mongoose
   // Mongo connection string example
@@ -26,6 +31,8 @@ mongoose
 app.use(bodyParser.json());
 // body-parser can also parses the body for url encoded data and make it available
 app.use(bodyParser.urlencoded({ extended: false }));
+
+app.use("/", express.static(path.join(__dirname, "angular")));
 
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -48,5 +55,8 @@ app.use("/api/geoentity", geoEntityRoutes);
 app.use("/api/geoentities", geoEntitiesRoutes);
 app.use("/api/lists", listsRoutes);
 app.use("/api/user", userRoutes);
+app.use((req, res, next) => {
+  res.sendFile(path.join(__dirname, "angular", "index.html"));
+});
 
 module.exports = app;
