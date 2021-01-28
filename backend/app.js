@@ -6,9 +6,8 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const colors = require("colors");
 
-const geoEntityRoutes = require("./routes/geoentity");
 const geoEntitiesRoutes = require("./routes/geoentities");
-const listsRoutes = require("./routes/lists");
+const listitemsRoutes = require("./routes/listitems");
 const userRoutes = require("./routes/user");
 
 // Load env vars
@@ -57,9 +56,8 @@ app.use((req, res, next) => {
 // in app.use, the "/api/geoentities" serves as a filter.
 // only the routes starting with /api/geoentitites will be
 // forwared in ./routes/geoentities.js
-app.use("/api/geoentity", geoEntityRoutes);
 app.use("/api/geoentities", geoEntitiesRoutes);
-app.use("/api/lists", listsRoutes);
+app.use("/api/listitems", listitemsRoutes);
 app.use("/api/user", userRoutes);
 app.use((req, res, next) => {
   res.sendFile(path.join(__dirname, "angular", "index.html"));

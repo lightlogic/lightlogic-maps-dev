@@ -6,7 +6,6 @@ const jwt = require("jsonwebtoken");
 const colors = require("colors");
 
 const User = require("../models/user");
-const user = require("../models/user");
 
 router.use(bodyparser.json());
 
