@@ -1,18 +1,56 @@
-const express = require("express");
-const router = express.Router();
-const bodyparser = require("body-parser");
-const colors = require("colors");
-
 const GeoEntity = require("../models/geoEntity");
-const checkAuth = require("../middleware/check-auth");
 const geoEntityUtils = require("../utils/geoEntity/geoEntityUtils");
 
-router.use(bodyparser.json());
+// @desc    Get all geoEntities. Available modes: metadata only, geometry only, full ( metadata | geojson | full)
+// @route   GET /api/geoentities
+// @access  Public
+exports.getGeoentities = (req, res, next) => {
+  GeoEntity.find()
+    .then((documents) => {
+      res.status(200).json({
+        message: "Features fetched successfully !",
+        features: documents,
+      });
+    })
+    .catch((error) => {
+      res.status(500).json({
+        message: "Fetching geoEntities failed!",
+      });
+    });
+};
 
-// post new commune based on name
-// method POST
-// path: /api/geoentity/swisstopo
-router.post("/swisstopo/adminunit", checkAuth, (req, res, next) => {
+// @desc    Get one geoEntity. Available modes: metadata only, geometry only, full ( metadata | geojson | full)
+// @route   GET /api/geoentities/:id
+// @access  Public
+exports.getGeoentity = (req, res, next) => {};
+
+// @desc    Toogle select/unselect property of geoEntity
+// @route   PATCH /api/geoentities/:id
+// @access  Public
+exports.toggleGeoEntitySelection = (req, res, next) => {
+  console.log(req.params.id);
+  console.log(req.body.selected);
+  GeoEntity.updateOne(
+    { _id: req.params.id },
+    { selected: req.body.selected }
+  ).then((result) => {
+    res.status(200).json({ message: "Feature selected" });
+  });
+};
+
+// @desc    Delete geoEntity
+// @route   /api/geoentities/:id
+// @access  Private
+exports.deleteGeoEntity = (req, res, next) => {
+  GeoEntity.deleteOne({ _id: req.params.id }).then((result) => {
+    res.status(200).json({ message: "Feature deleted" });
+  });
+};
+
+// @desc      Add a new commune geoEntity fetched from Swisstopo Search API based on the commune name
+// @route     POST /api/geoentities/swisstopo/adminunit
+// @access    Private
+exports.addAdminUnit = (req, res, next) => {
   const COMMUNE_TYPE_URI = process.env.ADMINUNIT_ISA_URI;
   const geoEntityType_Commune = process.env.ADMINUNIT_TYPE;
   const COMMUNE_DOMAIN_LABEL = "bfsNum";
@@ -64,12 +102,12 @@ router.post("/swisstopo/adminunit", checkAuth, (req, res, next) => {
       });
     }
   });
-});
+};
 
-// post new river based on name
-// method POST
-// path: /api/geoentity/swisstopo/river
-router.post("/swisstopo/river", checkAuth, (req, res, next) => {
+// @desc    Add a new river geoEntity fetched from Swisstopo Search API based on river name
+// @route   POST /api/geoentities/swisstopo/river
+// @access  Private
+exports.addRiver = (req, res, next) => {
   RIVER_isA_URI = process.env.RIVER_ISA_URI;
   const geoEntityType_river = process.env.RIVER_TYPE;
   const domainIdLabel = "gewissNum";
@@ -119,64 +157,4 @@ router.post("/swisstopo/river", checkAuth, (req, res, next) => {
       });
     }
   });
-});
-
-// method GET one geoEntity
-// path: /api/geoentity
-// full objects with metadata AND geometry (geoJSON)
-router.get("", (req, res, next) => {
-  //TODO fix code to get geoEntity
-  GeoEntity.find().then((documents) => {
-    res.status(200).json({
-      message: "Features fetched successfully !",
-      features: documents,
-    });
-  });
-});
-
-// method GET one geoEntity
-// path: /api/geoentity/metadata
-// only retrieve metadata (no geometry)
-router.get("/metadata", (req, res, next) => {
-  //TODO fix code to get geoEntity
-  GeoEntity.find().then((documents) => {
-    res.status(200).json({
-      message: "Features fetched successfully !",
-      features: documents,
-    });
-  });
-});
-
-// method GET one geoEntity
-// path: /api/geoentity/geojson
-// only retrieve geometry (geoJSON)
-router.get("/geojson", (req, res, next) => {
-  //TODO fix code to get geoEntity
-  GeoEntity.find().then((documents) => {
-    res.status(200).json({
-      message: "Features fetched successfully !",
-      features: documents,
-    });
-  });
-});
-
-// methode PATCH
-// path: /api/geoentity/select/fi111jej3iojofidj
-router.patch("/select/:id", (req, res, next) => {
-  GeoEntity.updateOne(
-    { _id: req.params.id },
-    { selected: req.body.selected }
-  ).then((result) => {
-    res.status(200).json({ message: "Feature selected" });
-  });
-});
-
-// methode DELETE
-// path: /api/geoentity/fi111jej3iojofidj
-router.delete("/:id", checkAuth, (req, res, next) => {
-  GeoEntity.deleteOne({ _id: req.params.id }).then((result) => {
-    res.status(200).json({ message: "Feature deleted" });
-  });
-});
-
-module.exports = router;
+};

@@ -61,7 +61,7 @@ export class FeaturesService {
 
   getItemList(itemType: string) {
     this.http
-      .get<{ message: string; items: any }>(BACKEND_URL + '/lists/' + itemType)
+      .get<{ message: string; items: any }>(BACKEND_URL + '/listitems/' + itemType)
       .pipe(
         map((itemsData) => {
           //return itemsData.items.label;
@@ -95,7 +95,7 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        BACKEND_URL + '/geoentity/swisstopo/adminunit',
+        BACKEND_URL + '/geoentities/swisstopo/adminunit',
         newCommune
       )
       .subscribe((responseJson) => {
@@ -115,7 +115,7 @@ export class FeaturesService {
     };
     this.http
       .post<{ message: string; feature: Feature }>(
-        BACKEND_URL + '/geoentity/swisstopo/river',
+        BACKEND_URL + '/geoentities/swisstopo/river',
         newRiver
       )
       .subscribe((responseJson) => {
@@ -134,7 +134,7 @@ export class FeaturesService {
   }
 
   deleteFeature(featureId: string) {
-    this.http.delete(BACKEND_URL + '/geoentity/' + featureId).subscribe(() => {
+    this.http.delete(BACKEND_URL + '/geoentities/' + featureId).subscribe(() => {
       // to keep in the local array of features the posts that does not have featureId
       // and delete the one that has the featureId
       // -> filter checks every elements of an array against a condition. It will keep the element that does NOT match the condition
@@ -151,7 +151,7 @@ export class FeaturesService {
       selected: selectionToSet,
     };
     this.http
-      .patch(BACKEND_URL + '/geoentity/select/' + featureId, selectedValue)
+      .patch(BACKEND_URL + '/geoentities/' + featureId, selectedValue)
       .subscribe(() => {
         this.features.find((x) => x.id === featureId).selected = selectionToSet;
         this.featuresUpdated.next([...this.features]);
@@ -163,7 +163,7 @@ export class FeaturesService {
       itemTypeValue: itemType,
     };
     this.http
-      .patch(BACKEND_URL + '/lists', typeValue)
+      .patch(BACKEND_URL + '/listitems', typeValue)
       .subscribe((responseJson) => {
         if (itemType == 'commune') {
           this.lstCommunes.length = 0;
@@ -180,7 +180,7 @@ export class FeaturesService {
 
   purgeListItems(itemType: string) {
     this.http
-      .delete(BACKEND_URL + '/lists/' + itemType)
+      .delete(BACKEND_URL + '/listitems/' + itemType)
       .subscribe((responseJson) => {
         if (itemType == 'commune') {
           this.lstCommunes.length = 0;
