@@ -10,7 +10,6 @@ import WMTStileGrid from 'ol/tilegrid/WMTS';
 import { GeoJSON } from 'ol/format';
 import proj4 from 'proj4';
 import { register } from 'ol/proj/proj4';
-
 import { Feature } from '../features/feature.model';
 
 @Injectable({ providedIn: 'root' })
@@ -62,6 +61,20 @@ export class MapsService {
     const epsgProjection: Projection = olProj.get(layerConfig.epsgProjCode);
     epsgProjection.setExtent(mExtent);
 
+    // // determine viewResolution based on passed resolution
+    // if (vResolution > 0.5) {
+    //   for (var i = 0; i < RESOLUTIONS.length; i++) {
+    //     if (vResolution > RESOLUTIONS[i]) {
+    //       viewResolution = myMatrixIds[i+3];
+    //       console.log('RESOLUTION ' + i + ' ' + RESOLUTIONS[i]);
+    //       console.log('myMatrixIds ' + i + ' ' + myMatrixIds[i]);
+    //       break;
+    //     }
+    //   }
+    // } else {
+    //   vResolution = 0.5;
+    // }
+    // console.log(viewResolution);
     // view
     const myView = new View({
       center: vCenter,

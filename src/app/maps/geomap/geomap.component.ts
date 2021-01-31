@@ -7,8 +7,13 @@ import { MapsService } from '../maps.service';
 import { FeaturesService } from '../../features/features.service';
 import { Feature } from '../../features/feature.model';
 
+import { environment } from '../../../environments/environment';
+
 import layerConf_GewaessernetzReferenz from '../layerConfig/geo.admin.ch/ch_swisstopo_vec25_gewaessernetz_referenz.json';
 import layerConf_LandeskartenGrau from '../layerConfig/geo.admin.ch/ch_swisstopo_pixelkarte_grau.json';
+
+const MAPRESOLUTION_TWEAKCONSTANT = environment.mapResolution_tweakConstant;
+
 @Component({
   selector: 'app-hydro-map',
   templateUrl: 'geomap.component.html',
@@ -16,8 +21,9 @@ import layerConf_LandeskartenGrau from '../layerConfig/geo.admin.ch/ch_swisstopo
 })
 export class HydroMapComponent implements OnInit, OnDestroy {
   Map: Map;
-  viewCenter: number[];
+  viewCenter: number[] = [0, 0];
   viewResolution: number;
+  viewBBOX: Array<number> = [2999999, 1999999, 2000000, 1000000];
   features: Feature[] = [];
   private featuresListSub: Subscription;
 
@@ -34,16 +40,41 @@ export class HydroMapComponent implements OnInit, OnDestroy {
         const featuresSelected = features.filter(
           (feature) => feature.selected == true
         );
+        featuresSelected.forEach((oneFeature) => {
+          var bboxArray: Array<number>;
+          bboxArray = oneFeature.bbox;
+          this.viewBBOX[0] = Math.min(bboxArray[0], this.viewBBOX[0]);
+          this.viewBBOX[1] = Math.min(bboxArray[1], this.viewBBOX[1]);
+          this.viewBBOX[2] = Math.max(bboxArray[2], this.viewBBOX[2]);
+          this.viewBBOX[3] = Math.max(bboxArray[3], this.viewBBOX[3]);
+        });
+        this.viewCenter[0] = Math.round(
+          (this.viewBBOX[0] + this.viewBBOX[2]) / 2
+        );
+        this.viewCenter[1] = Math.round(
+          (this.viewBBOX[1] + this.viewBBOX[3]) / 2
+        );
+        this.viewResolution = Math.round(
+          Math.max(this.viewBBOX[2] - this.viewBBOX[0]) /
+            MAPRESOLUTION_TWEAKCONSTANT
+        );
+        console.log('View Resolution: ' + this.viewResolution);
         if (!this.Map) {
-          this.viewCenter = [2573902.1157, 1198145.9932]
-          this.viewResolution = 50;
-          this.Map = this.mapsService.initMap(layerConf_LandeskartenGrau, this.viewCenter, this.viewResolution);
+          this.Map = this.mapsService.initMap(
+            layerConf_LandeskartenGrau,
+            this.viewCenter,
+            this.viewResolution
+          );
           this.Map.addLayer(
             this.mapsService.getSelectedCommunesLayer(featuresSelected)
           );
         } else {
           this.Map.dispose();
-          this.Map = this.mapsService.initMap(layerConf_LandeskartenGrau, this.viewCenter, this.viewResolution);
+          this.Map = this.mapsService.initMap(
+            layerConf_LandeskartenGrau,
+            this.viewCenter,
+            this.viewResolution
+          );
           this.Map.addLayer(
             this.mapsService.getSelectedCommunesLayer(featuresSelected)
           );

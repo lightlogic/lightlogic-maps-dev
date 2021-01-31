@@ -10,7 +10,6 @@ import { AuthService } from 'src/app/auth/auth.service';
   styleUrls: ['./feature-list.component.css'],
 })
 export class FeatureListComponent implements OnInit, OnDestroy {
-
   isLoading = false;
   userIsAuthenticated = false;
   features: Feature[] = [];
@@ -36,13 +35,13 @@ export class FeatureListComponent implements OnInit, OnDestroy {
         );
         this.isLoading = false;
       });
-      // authStatus has to be retrieved from authService private variable
-      // before the current component is initiated -> from getter this.authService.getIsAuth();
-      this.userIsAuthenticated = this.authService.getIsAuth();
-      // once the current component is created, any change in value (for ex when logging out)
-      // can be dealt with the private subscription on this component private authStatusSubs: Subscription;
+    // authStatus has to be retrieved from authService private variable
+    // before the current component is initiated -> from getter this.authService.getIsAuth();
+    this.userIsAuthenticated = this.authService.getIsAuth();
+    // once the current component is created, any change in value (for ex when logging out)
+    // can be dealt with the private subscription on this component private authStatusSubs: Subscription;
 
-      this.authStatusSubs = this.authService
+    this.authStatusSubs = this.authService
       .getAuthStatusListener()
       .subscribe((isAuthenticated) => {
         this.userIsAuthenticated = isAuthenticated;

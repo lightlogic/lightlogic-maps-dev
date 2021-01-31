@@ -36,6 +36,7 @@ export class FeaturesService {
             } else if ((feature.isA = ADMINUNIT_ISA_URI)) {
               featureType = 'Commune';
             }
+            //console.log(feature)
             return {
               id: feature._id,
               uri: feature.uri,
@@ -46,7 +47,7 @@ export class FeaturesService {
               geoJSON: feature.geoJSON,
               selected: feature.selected,
               parentFeature: feature.parentLabel,
-              bbox: feature.bbox,
+              bbox: feature.geoJSON[0].bbox,
               projection: 'EPSG:2056',
             };
           });
